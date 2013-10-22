@@ -40,9 +40,10 @@ namespace twl
 
 				void process_data()
 				{
-					m_process_fnc();
+					m_items = m_process_fnc();
 				}
 
+				// direct read access to the underlaying data/items
 				const std::vector<T>& data() const noexcept
 				{return m_items;}
 

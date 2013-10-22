@@ -9,6 +9,7 @@
 
 #include "map_datafile_area.h"
 #include "map_datafile_items.h"
+#include "map_datafile_utl.h"
 
 #include <mlk/containers/container_utl.h>
 #include <mlk/types/types.h>
@@ -122,10 +123,13 @@ namespace twl
 					[&]
 					{
 						std::vector<mlk::data_packet> result;
+						std::vector<int> data_lengths{calc_data_length(m_data_offset_area.data(), this->data_area_size())};
 						int i{this->items_area_size() + this->ucmpdata_area_size() + this->dataoffset_area_size() + this->iteminfo_area_size() + this->itemoffset_area_size()};
-						for(; i < loops;)
-						{
 
+						for(int data_lengths_index{0}; i < loops; ++data_lengths_index)
+						{
+							result.push_back(mlk::cnt::cut_vec(i, i+data_lengths[data_lengths_index], m_data)); // TODO: this item is one byte larger because of cut_vec
+							i += data_lengths[data_lengths_index];
 						}
 
 						return result;
