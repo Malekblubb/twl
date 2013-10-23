@@ -9,7 +9,6 @@
 
 #include "map_datafile_items.h"
 #include "map_datafile_reader.h"
-#include "map_datafile_utl.h"
 
 #include <mlk/containers/container_utl.h>
 
@@ -25,7 +24,6 @@ namespace twl
 			class map_datafile
 			{
 				map_datafile_reader m_reader_impl;
-
 				map_datafile_header m_header{{0}};
 
 			public:

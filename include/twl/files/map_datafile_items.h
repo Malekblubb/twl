@@ -11,7 +11,6 @@
 
 #include <cstring>
 
-#include <iostream>
 
 namespace twl
 {
@@ -48,13 +47,6 @@ namespace twl
 				int m_start;
 				int m_num;
 			};
-
-			struct basic_map_datafile_item
-			{
-				int m_type_and_id;
-				int m_size;
-			};
-
 
 			class map_datafile_item
 			{

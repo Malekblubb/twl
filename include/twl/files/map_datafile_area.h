@@ -7,10 +7,11 @@
 #define TWL_FILES_MAP_DATAFILE_AREA_H
 
 
+#include "map_datafile_items.h"
+
 #include <mlk/containers/container_utl.h>
 #include <mlk/types/types.h>
 
-#include "map_datafile_items.h"
 #include <functional>
 
 
@@ -33,15 +34,12 @@ namespace twl
 			public:
 				void on_process_data(mlk::data_packet& data, std::function<func_t> fnc)
 				{
-					m_data = data; // take the reference
 					m_process_fnc = fnc;
 					this->process_data();
 				}
 
 				void process_data()
-				{
-					m_items = m_process_fnc();
-				}
+				{m_items = m_process_fnc();}
 
 				// direct read access to the underlaying data/items
 				const std::vector<T>& data() const noexcept

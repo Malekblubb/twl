@@ -8,7 +8,6 @@
 
 
 #include "datafile_base.h"
-#include "map_datafile_area.h"
 #include "map_datafile_body.h"
 #include "map_datafile_items.h"
 
@@ -64,9 +63,6 @@ namespace twl
 					mlk::data_packet data(m_header.body_size());
 					this->read(data);
 					m_body = map_datafile_body{data, m_header};
-
-
-//					m_body.on_read(data);
 				}
 
 
@@ -75,15 +71,10 @@ namespace twl
 				// reader wrapper
 				template<typename T>
 				std::int64_t read(T& map_df_item)
-				{
-					return m_base_impl.read(sizeof(T), &map_df_item);
-				}
+				{return m_base_impl.read(sizeof(T), &map_df_item);}
 
 				std::int64_t read(mlk::data_packet& data)
-				{
-					return m_base_impl.read(data.size(), &data[0]);
-				}
-
+				{return m_base_impl.read(data.size(), &data[0]);}
 
 			public:
 				bool valid() const noexcept {return m_valid;}
