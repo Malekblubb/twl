@@ -49,8 +49,8 @@ namespace twl
 				{
 					int loops{this->iteminfo_area_size()};
 
-					m_iteminfo_area.on_process_data(m_data,
-					[&]
+					m_iteminfo_area.on_process_data(
+					[&](std::vector<map_datafile_iteminfo>& items) -> void
 					{
 						std::vector<map_datafile_iteminfo> result;
 						for(int i{0}; i < loops; i += sizeof(map_datafile_iteminfo))
@@ -58,49 +58,49 @@ namespace twl
 																   mlk::cnt::make_int(i+4, m_data),
 																   mlk::cnt::make_int(i+8, m_data)});
 
-						return result;
+						items = result;
 					});
 
 					loops += this->itemoffset_area_size();
 
-					m_item_offset_area.on_process_data(m_data,
-					[&]
+					m_item_offset_area.on_process_data(
+					[&](std::vector<int>& items) -> void
 					{
 						std::vector<int> result;
 						for(int i{this->iteminfo_area_size()}; i < loops; i += sizeof(int))
 							result.push_back(mlk::cnt::make_int(i, m_data));
 
-						return result;
+						items = result;
 					});
 
 					loops += this->dataoffset_area_size();
 
-					m_data_offset_area.on_process_data(m_data,
-					[&]
+					m_data_offset_area.on_process_data(
+					[&](std::vector<int>& items) -> void
 					{
 						std::vector<int> result;
 						for(int i{this->iteminfo_area_size() + this->itemoffset_area_size()}; i < loops; i += sizeof(int))
 							result.push_back(mlk::cnt::make_int(i, m_data));
 
-						return result;
+						items =	result;
 					});
 
 					loops += this->ucmpdata_area_size();
 
-					m_ucmp_datasize_area.on_process_data(m_data,
-					[&]
+					m_ucmp_datasize_area.on_process_data(
+					[&](std::vector<int>& items) -> void
 					{
 						std::vector<int> result;
 						for(int i{this->dataoffset_area_size() + this->iteminfo_area_size() + this->itemoffset_area_size()}; i < loops; i += sizeof(int))
 							result.push_back(mlk::cnt::make_int(i, m_data));
 
-						return result;
+						items =	result;
 					});
 
 					loops += this->items_area_size();
 
-					m_item_area.on_process_data(m_data,
-					[&]
+					m_item_area.on_process_data(
+					[&](std::vector<map_datafile_item>& items) -> void
 					{
 						std::vector<map_datafile_item> result;
 						int i{this->ucmpdata_area_size() + this->dataoffset_area_size() + this->iteminfo_area_size() + this->itemoffset_area_size()};
@@ -111,16 +111,16 @@ namespace twl
 							i += (2 * sizeof(int)) + itemsize;
 						}
 
-						return result;
+						items =	result;
 					});
 
 					loops += this->data_area_size();
 
-					m_data_area.on_process_data(m_data,
-					[&]
+					m_data_area.on_process_data(
+					[&](std::vector<mlk::data_packet>& items) -> void
 					{
 						std::vector<mlk::data_packet> result;
-						std::vector<int> data_lengths{calc_data_length(m_data_offset_area.data(), this->data_area_size())};
+						std::vector<int> data_lengths{calc_data_length(m_data_offset_area.item_data(), this->data_area_size())};
 						int i{this->items_area_size() + this->ucmpdata_area_size() + this->dataoffset_area_size() + this->iteminfo_area_size() + this->itemoffset_area_size()};
 
 						for(int data_lengths_index{0}; i < loops; ++data_lengths_index)
@@ -129,7 +129,7 @@ namespace twl
 							i += data_lengths[data_lengths_index];
 						}
 
-						return result;
+						items =	result;
 					});
 				}
 

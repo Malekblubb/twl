@@ -24,25 +24,20 @@ namespace twl
 			template<typename T>
 			class map_datafile_area_base
 			{
-				using func_t = std::vector<T>();
+				using func_t = void(std::vector<T>&);
 
 			protected:
 				std::vector<T> m_items;
-				mlk::data_packet m_data;
 				std::function<func_t> m_process_fnc;
 
 			public:
-				void on_process_data(mlk::data_packet& data, std::function<func_t> fnc)
+				void on_process_data(std::function<func_t> fnc)
 				{
-					m_process_fnc = fnc;
-					this->process_data();
+					fnc(m_items);
 				}
 
-				void process_data()
-				{m_items = m_process_fnc();}
-
 				// direct read access to the underlaying data/items
-				const std::vector<T>& data() const noexcept
+				const std::vector<T>& item_data() const noexcept
 				{return m_items;}
 
 				int field(int index) const noexcept

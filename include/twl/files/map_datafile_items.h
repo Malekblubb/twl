@@ -64,6 +64,8 @@ namespace twl
 					m_data(data)
 				{ }
 				map_datafile_item(map_datafile_item&& o) noexcept = default;
+				map_datafile_item(const map_datafile_item& o) = default;
+				map_datafile_item& operator=(const map_datafile_item& o) = default;
 
 				int type() const noexcept {return m_type;}
 				int id() const noexcept {return m_id;}
