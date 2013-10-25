@@ -46,6 +46,7 @@ namespace twl
 					this->parse_body();
 				}
 
+			private:
 				bool parse_header()
 				{
 					this->read(m_header);
@@ -65,9 +66,6 @@ namespace twl
 					m_body = map_datafile_body{data, m_header};
 				}
 
-
-
-			private:
 				// reader wrapper
 				template<typename T>
 				std::int64_t read(T& map_df_item)
@@ -75,6 +73,7 @@ namespace twl
 
 				std::int64_t read(mlk::data_packet& data)
 				{return m_base_impl.read(data.size(), &data[0]);}
+
 
 			public:
 				bool valid() const noexcept {return m_valid;}

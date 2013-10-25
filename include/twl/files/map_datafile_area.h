@@ -32,9 +32,7 @@ namespace twl
 
 			public:
 				void on_process_data(std::function<func_t> fnc)
-				{
-					fnc(m_items);
-				}
+				{fnc(m_items);}
 
 				// direct read access to the underlaying data/items
 				const std::vector<T>& item_data() const noexcept

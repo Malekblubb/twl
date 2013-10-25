@@ -44,6 +44,7 @@ namespace twl
 				{this->process_data();}
 
 
+			private:
 				// process the input data
 				void process_data()
 				{
@@ -133,10 +134,6 @@ namespace twl
 					});
 				}
 
-				int size() const noexcept
-				{return m_header.body_size();}
-
-			private:
 				int iteminfo_area_size() const noexcept
 				{return m_header.m_num_itemtypes * 12;}
 
@@ -154,6 +151,10 @@ namespace twl
 
 				int data_area_size() const noexcept
 				{return m_header.m_data_area_size;}
+
+			public:
+				int size() const noexcept
+				{return m_header.body_size();}
 			};
 		}
 	}

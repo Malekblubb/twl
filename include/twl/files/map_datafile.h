@@ -33,12 +33,12 @@ namespace twl
 				{this->open();}
 
 
-			private:
 				void open()
 				{
 					this->open_read();
 				}
 
+			private:
 				void open_read()
 				{
 					m_reader_impl.parse_file();
