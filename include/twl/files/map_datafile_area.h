@@ -13,6 +13,7 @@
 #include <mlk/types/types.h>
 
 #include <functional>
+#include <stdexcept>
 
 
 namespace twl
@@ -38,10 +39,10 @@ namespace twl
 				const std::vector<T>& item_data() const noexcept
 				{return m_items;}
 
-				int field(int index) const noexcept
+				T field(int index) const noexcept
 				{
 					if(mlk::cnt::is_out_of_bounds(m_items, index))
-						return -1;
+						throw std::out_of_range("twl::file::internal::map_datafile_area_base::field(): index was out of bounds");
 					return m_items[index];
 				}
 			};
