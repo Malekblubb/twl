@@ -24,18 +24,29 @@ namespace twl
 			class map_datafile
 			{
 				map_datafile_reader m_reader_impl;
-				map_datafile_header m_header{{0}};
+				bool m_valid{false};
 
 			public:
+				enum class item_type : int
+				{
+					version = 0,
+					info,
+					image,
+					envelope,
+					group,
+					layer,
+					envpoints
+				};
+
 				template<typename T>
 				map_datafile(const T& file) :
 					m_reader_impl{file}
-				{this->open();}
-
-
-				void open()
 				{
-					this->open_read();
+					if(m_reader_impl.exists())
+					{
+						this->open_read();
+						m_valid = m_reader_impl.valid();
+					}
 				}
 
 			private:
@@ -43,6 +54,14 @@ namespace twl
 				{
 					m_reader_impl.parse_file();
 				}
+
+				void open_write()
+				{
+
+				}
+
+			public:
+				bool valid() const noexcept {return m_valid;}
 			};
 		}
 	}

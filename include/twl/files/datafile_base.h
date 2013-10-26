@@ -28,7 +28,7 @@ namespace twl
 
 			public:
 				template<typename T>
-				datafile_base(const T& file, const std::ios::openmode& openmodes) :
+				datafile_base(const T& file, std::ios::openmode openmodes) :
 					file_base{file},
 					m_filestre{m_path, openmodes}
 				{ }

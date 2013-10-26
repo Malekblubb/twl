@@ -22,11 +22,11 @@ namespace twl
 		{
 			class map_datafile_reader
 			{
-				bool m_valid{false};
 				datafile_base m_base_impl;
 
 				map_datafile_header m_header{{0}};
 				map_datafile_body m_body;
+				bool m_valid{false};
 
 			public:
 				template<typename T>
@@ -43,23 +43,28 @@ namespace twl
 				bool parse_file()
 				{
 					this->parse_header();
+
+					if(!m_valid)
+						return false;
+
 					this->parse_body();
+					return true; // TODO: add body checking here
 				}
 
 			private:
-				bool parse_header()
+				void parse_header()
 				{
 					this->read(m_header);
 
 					if(!m_header.valid())
 					{
+						m_valid = false;
 						mlk::lerr() << "map unsupported, invalid header";
-						return false;
+						return;
 					}
-					return true;
 				}
 
-				bool parse_body()
+				void parse_body()
 				{
 					mlk::data_packet data(m_header.body_size());
 					this->read(data);
@@ -77,6 +82,7 @@ namespace twl
 
 			public:
 				bool valid() const noexcept {return m_valid;}
+				bool exists() const noexcept {return m_base_impl.exists();}
 			};
 		}
 	}
