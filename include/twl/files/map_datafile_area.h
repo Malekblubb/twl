@@ -8,8 +8,10 @@
 
 
 #include "map_datafile_items.h"
+#include "map_datafile_types.h"
 
 #include <mlk/containers/container_utl.h>
+#include <mlk/tools/enum_utl.h>
 #include <mlk/types/types.h>
 
 #include <functional>
@@ -55,19 +57,19 @@ namespace twl
 			class map_datafile_area<map_datafile_iteminfo> : public map_datafile_area_base<map_datafile_iteminfo>
 			{
 			public:
-				int start_of_type(int type) const noexcept // TODO: do the types with enum class types
+				int start_of_type(item_type type) const noexcept
 				{
 					for(auto& a : m_items)
-						if(a.m_type == type)
+						if(a.m_type == mlk::enum_utl::to_int(type))
 							return a.m_start;
 					return -1;
 				}
 
-				int num_type(int type) const noexcept
+				int num_type(item_type type) const noexcept
 				{
 					int num{0};
 					for(auto& a : m_items)
-						if(a.m_type == type)
+						if(a.m_type == mlk::enum_utl::to_int(type))
 							++num;
 					return num;
 				}
