@@ -11,6 +11,7 @@
 #include "map_datafile_reader.h"
 
 #include <mlk/containers/container_utl.h>
+#include <mlk/tools/enum_utl.h>
 
 #include <vector>
 
@@ -27,17 +28,6 @@ namespace twl
 				bool m_valid{false};
 
 			public:
-				enum class item_type : int
-				{
-					version = 0,
-					info,
-					image,
-					envelope,
-					group,
-					layer,
-					envpoints
-				};
-
 				template<typename T>
 				map_datafile(const T& file) :
 					m_reader_impl{file}
@@ -48,6 +38,11 @@ namespace twl
 						m_valid = m_reader_impl.valid();
 					}
 				}
+
+				template<item_type type>
+				auto find_item()
+				-> std::pair<int, int>
+				{return m_reader_impl.find_item<type>();}
 
 			private:
 				void open_read()

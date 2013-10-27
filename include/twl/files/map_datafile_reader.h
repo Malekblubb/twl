@@ -51,6 +51,11 @@ namespace twl
 					return true; // TODO: add body checking here
 				}
 
+				template<item_type type>
+				auto find_item()
+				-> std::pair<int, int>
+				{return m_body.find_item<type>();}
+
 			private:
 				void parse_header()
 				{
@@ -62,6 +67,8 @@ namespace twl
 						mlk::lerr() << "map unsupported, invalid header";
 						return;
 					}
+					else
+						m_valid = true;
 				}
 
 				void parse_body()

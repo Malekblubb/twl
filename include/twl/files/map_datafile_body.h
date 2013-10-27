@@ -9,11 +9,13 @@
 
 #include "map_datafile_area.h"
 #include "map_datafile_items.h"
+#include "map_datafile_types.h"
 #include "map_datafile_utl.h"
 
 #include <mlk/containers/container_utl.h>
 #include <mlk/types/types.h>
 
+#include <utility>
 #include <vector>
 
 
@@ -35,14 +37,17 @@ namespace twl
 				map_datafile_area<map_datafile_item> m_item_area;
 				map_datafile_area<mlk::data_packet> m_data_area;
 
-			public:
+			public:				
 				map_datafile_body() = default;
-
 				map_datafile_body(const mlk::data_packet& data, const map_datafile_header& header) :
 					m_data(data),
 					m_header(header)
 				{this->process_data();}
 
+				template<item_type type>
+				auto find_item()
+				-> std::pair<int, int>
+				{return std::make_pair(m_iteminfo_area.start_of_type<type>(), m_iteminfo_area.num_items_of_type<type>());}
 
 			private:
 				// process the input data

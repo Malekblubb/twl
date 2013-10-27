@@ -8,6 +8,7 @@
 
 
 #include "map_datafile.h"
+#include "map_datafile_types.h"
 
 
 namespace twl
@@ -23,7 +24,9 @@ namespace twl
 			template<typename T>
 			map(const T& file) :
 				m_datafile{file}
-			{ }
+			{
+				std::cout << m_datafile.find_item<item_type::group>().second << std::endl;
+			}
 		};
 	}
 }

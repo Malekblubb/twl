@@ -57,7 +57,8 @@ namespace twl
 			class map_datafile_area<map_datafile_iteminfo> : public map_datafile_area_base<map_datafile_iteminfo>
 			{
 			public:
-				int start_of_type(item_type type) const noexcept
+				template<item_type type>
+				int start_of_type() const noexcept
 				{
 					for(auto& a : m_items)
 						if(a.m_type == mlk::enum_utl::to_int(type))
@@ -65,7 +66,8 @@ namespace twl
 					return -1;
 				}
 
-				int num_items_of_type(item_type type) const noexcept
+				template<item_type type>
+				int num_items_of_type() const noexcept
 				{
 					for(auto& a : m_items)
 					{
