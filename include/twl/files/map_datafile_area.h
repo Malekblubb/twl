@@ -16,7 +16,7 @@
 
 #include <functional>
 #include <stdexcept>
-
+#include <iostream>
 
 namespace twl
 {
@@ -65,13 +65,14 @@ namespace twl
 					return -1;
 				}
 
-				int num_type(item_type type) const noexcept
+				int num_items_of_type(item_type type) const noexcept
 				{
-					int num{0};
 					for(auto& a : m_items)
+					{
 						if(a.m_type == mlk::enum_utl::to_int(type))
-							++num;
-					return num;
+							return a.m_num;
+					}
+					return 0;
 				}
 			};
 
