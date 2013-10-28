@@ -21,6 +21,14 @@ namespace twl
 			layer,
 			envpoints
 		};
+
+		enum class layer_type : int
+		{
+			invalid = 0,
+			game,
+			tiles,
+			quads
+		};
 	}
 }
 
