@@ -7,9 +7,7 @@
 #define TWL_FILES_FILES_H
 
 
-#include "map.h"
-#include "file_base.h"
-#include "map_datafile.h"
+#include "map_extended/map_extended.h"
 
 
 #endif // TWL_FILES_FILES_H

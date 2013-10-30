@@ -3,8 +3,8 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_FILES_MAP_DATAFILE_H
-#define TWL_FILES_MAP_DATAFILE_H
+#ifndef TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_H
+#define TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_H
 
 
 #include "map_datafile_items.h"
@@ -44,6 +44,14 @@ namespace twl
 				-> std::pair<int, int>
 				{return m_reader_impl.find_item<type>();}
 
+				template<item_type type>
+				auto items_of_type()
+				-> std::vector<map_datafile_item>
+				{return m_reader_impl.items_of_type<type>();}
+
+				mlk::data_packet get_item(int index)
+				{return m_reader_impl.get_item(index);}
+
 			private:
 				void open_read()
 				{
@@ -63,4 +71,4 @@ namespace twl
 }
 
 
-#endif // TWL_FILES_MAP_DATAFILE_H
+#endif // TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_H

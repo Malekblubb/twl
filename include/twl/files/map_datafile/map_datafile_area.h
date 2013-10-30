@@ -3,8 +3,8 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_FILES_MAP_DATAFILE_AREA_H
-#define TWL_FILES_MAP_DATAFILE_AREA_H
+#ifndef TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_AREA_H
+#define TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_AREA_H
 
 
 #include "map_datafile_items.h"
@@ -17,6 +17,7 @@
 #include <functional>
 #include <stdexcept>
 #include <iostream>
+
 
 namespace twl
 {
@@ -110,4 +111,4 @@ namespace twl
 }
 
 
-#endif // TWL_FILES_MAP_DATAFILE_AREA_H
+#endif // TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_AREA_H

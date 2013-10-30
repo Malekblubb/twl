@@ -3,8 +3,8 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_FILES_MAP_DATAFILE_BODY_H
-#define TWL_FILES_MAP_DATAFILE_BODY_H
+#ifndef TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_BODY_H
+#define TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_BODY_H
 
 
 #include "map_datafile_area.h"
@@ -48,6 +48,20 @@ namespace twl
 				auto find_item()
 				-> std::pair<int, int>
 				{return std::make_pair(m_iteminfo_area.start_of_type<type>(), m_iteminfo_area.num_items_of_type<type>());}
+
+				template<item_type type>
+				auto items_of_type()
+				-> std::vector<map_datafile_item>
+				{
+					std::vector<map_datafile_item> result;
+					for(auto& a : m_item_area.item_data())
+						if(a.type() == mlk::enum_utl::to_int(type))
+							result.push_back(a);
+					return result;
+				}
+
+				mlk::data_packet get_item(int index)
+				{return m_item_area.data(index);}
 
 			private:
 				// process the input data
@@ -166,4 +180,4 @@ namespace twl
 }
 
 
-#endif // TWL_FILES_MAP_DATAFILE_BODY_H
+#endif // TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_BODY_H

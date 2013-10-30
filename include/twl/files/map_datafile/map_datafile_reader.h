@@ -3,13 +3,14 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_FILES_MAP_DATAFILE_READER_H
-#define TWL_FILES_MAP_DATAFILE_READER_H
+#ifndef TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_READER_H
+#define TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_READER_H
 
 
-#include "datafile_base.h"
 #include "map_datafile_body.h"
 #include "map_datafile_items.h"
+
+#include <twl/files/datafile_base.h>
 
 #include <mlk/log/log.h>
 
@@ -56,6 +57,14 @@ namespace twl
 				-> std::pair<int, int>
 				{return m_body.find_item<type>();}
 
+				template<item_type type>
+				auto items_of_type()
+				-> std::vector<map_datafile_item>
+				{return m_body.items_of_type<type>();}
+
+				mlk::data_packet get_item(int index)
+				{return m_body.get_item(index);}
+
 			private:
 				void parse_header()
 				{
@@ -97,4 +106,4 @@ namespace twl
 
 
 
-#endif // TWL_FILES_MAP_DATAFILE_READER_H
+#endif // TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_READER_H

@@ -3,8 +3,8 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_FILES_MAP_DATAFILE_ITEMS_H
-#define TWL_FILES_MAP_DATAFILE_ITEMS_H
+#ifndef TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_ITEMS_H
+#define TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_ITEMS_H
 
 
 #include "map_datafile_types.h"
@@ -261,4 +261,4 @@ namespace twl
 
 
 
-#endif // TWL_FILES_MAP_DATAFILE_ITEMS_H
+#endif // TWL_FILES_MAP_DATAFILE_MAP_DATAFILE_ITEMS_H
