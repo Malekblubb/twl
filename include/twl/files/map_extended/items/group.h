@@ -8,6 +8,7 @@
 
 
 #include "item_base.h"
+#include "layer.h"
 
 #include <memory>
 #include <string>

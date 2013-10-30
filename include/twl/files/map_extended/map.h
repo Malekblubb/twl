@@ -7,6 +7,7 @@
 #define TWL_FILES_MAP_EXTENDED_MAP_H
 
 
+#include "map_utl.h"
 #include "items/items.h"
 
 #include <twl/files/map_datafile/map_datafile.h>
@@ -47,12 +48,17 @@ namespace twl
 		private:
 			void process_datafile()
 			{
-//				auto a = m_datafile.items_of_type<item_type::layer>();
 				auto groups = m_datafile.items_of_type<item_type::group>();
+
 				for(auto& a : groups)
 				{
+					// construct new group
 					internal::map_datafile_group basic_group{a};
-					map_itm::map_group ext_group;
+					map_itm::map_group ext_group{map_utl::internal::make_group(basic_group)};
+					ext_group.set_order(m_groups.size()); // set the order manually
+					m_groups.push_back(ext_group); // save this group
+
+//					std::cout << m_groups.back().clip_x() << std::endl;
 				}
 
 
