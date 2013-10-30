@@ -8,6 +8,7 @@
 
 
 #include "map.h"
+#include "map_utl.h"
 #include "items/items.h"
 
 
