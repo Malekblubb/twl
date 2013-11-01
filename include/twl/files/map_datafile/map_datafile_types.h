@@ -29,6 +29,12 @@ namespace twl
 			tiles,
 			quads
 		};
+
+		enum class layer_flags : int
+		{detail = 1};
+
+		enum class tile_layer_flags : int
+		{is_game_layer = 1};
 	}
 }
 
