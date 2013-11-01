@@ -55,15 +55,16 @@ namespace twl
 			std::string m_name{"Tiles"};
 
 		public:
-			map_layer() :
-				internal::map_layer_base{mlk::enum_utl::to_int(layer_type::tiles), 0}
+			map_layer(bool is_game) :
+				internal::map_layer_base{mlk::enum_utl::to_int(layer_type::tiles), is_game},
+				m_is_game_layer{is_game}
 			{ }
 
 			void set_width(int width) noexcept {m_width = width;}
 			void set_height(int height) noexcept {m_height = height;}
 			void set_group_index(int group) noexcept {m_group = group;}
 			void set_order(int order) noexcept {m_order = order;}
-			void set_detail(bool is_detail) noexcept {m_detail = is_detail;}
+			void set_detail(bool true_false) noexcept {m_detail = true_false;}
 			void set_as_game(bool true_false) noexcept {m_is_game_layer = true_false; m_flags |= true_false;}
 			void set_image(map_image image) noexcept {m_image = std::move(image);} // TODO: test performace without move
 			void set_name(std::string name) noexcept {m_name = std::move(name);}
@@ -82,11 +83,28 @@ namespace twl
 		template<>
 		class map_layer<layer_type::quads> : public internal::map_layer_base
 		{
+			int m_group{0}, m_order{0};
+			bool m_detail{false};
+			map_image m_image;
+			std::string m_name{"Quads"};
+
 
 		public:
-			map_layer(int flags = 0) :
-				internal::map_layer_base{mlk::enum_utl::to_int(layer_type::quads), flags}
+			map_layer() :
+				internal::map_layer_base{mlk::enum_utl::to_int(layer_type::quads), 0}
 			{ }
+
+			void set_group_index(int group) noexcept {m_group = group;}
+			void set_order(int order) noexcept {m_order = order;}
+			void set_detail(bool true_false) noexcept {m_detail = true_false;}
+			void set_image(map_image image) noexcept {m_image = std::move(image);}
+			void set_name(std::string name) noexcept {m_name = std::move(name);}
+
+			int group_index() const noexcept {return m_group;}
+			int order() const noexcept {return m_order;}
+			bool is_detail() const noexcept {return m_detail;}
+			const map_image& image() const noexcept {return m_image;}
+			std::string name() const noexcept {return m_name;}
 		};
 	}
 }
