@@ -72,6 +72,7 @@ namespace twl
 			int clip_y() const noexcept {return m_clip_y;}
 			int clip_w() const noexcept {return m_clip_w;}
 			int clip_h() const noexcept {return m_clip_h;}
+			std::size_t num_layers() const noexcept {return m_layers.size();}
 		};
 	}
 }
