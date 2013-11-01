@@ -22,7 +22,7 @@ namespace twl
 		class map_group : public internal::map_item_base
 		{
 			// layer
-			using vec = std::vector<std::shared_ptr<internal::map_layer_base>>;
+			using vec = std::vector<std::shared_ptr<map_layer<layer_type::base>>>;
 			vec m_layers;
 
 			// sepcs
@@ -42,7 +42,7 @@ namespace twl
 			{
 				static_assert(std::is_same<T, map_layer<layer_type::tiles>>::value ||
 							  std::is_same<T, map_layer<layer_type::quads>>::value, "invalid type passed to twl::file::map_group::add_layer<T>");
-				m_layers.push_back(std::static_pointer_cast<internal::map_layer_base>(layer));
+				m_layers.push_back(std::static_pointer_cast<map_layer<layer_type::base>>(layer));
 			}
 
 			template<typename T>
