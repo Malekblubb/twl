@@ -20,7 +20,7 @@ namespace twl
 		{
 			// helper function to make a extended group out of a datafile_group
 			// i don't want this as constructor in map_itm::map_group
-			map_itm::map_group make_group(const file::internal::map_datafile_group& group)
+			inline map_itm::map_group make_group(const file::internal::map_datafile_group& group)
 			{
 				map_itm::map_group result;
 				result.set_clipping(group.clipping());
