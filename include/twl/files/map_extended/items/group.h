@@ -40,8 +40,8 @@ namespace twl
 			template<typename T>
 			void add_layer(const T& layer) noexcept
 			{
-				static_assert(std::is_same<T, map_tiles_layer>::value ||
-							  std::is_same<T, map_quads_layer>::value, "invalid type passed to twl::file::map_group::add_layer<T>");
+				static_assert(std::is_same<T, map_layer<layer_type::tiles>>::value ||
+							  std::is_same<T, map_layer<layer_type::quads>>::value, "invalid type passed to twl::file::map_group::add_layer<T>");
 				m_layers.push_back(std::static_pointer_cast<internal::map_layer_base>(layer));
 			}
 
