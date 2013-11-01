@@ -21,12 +21,13 @@ namespace twl
 		class map_image : public internal::map_item_base
 		{
 			mlk::data_packet m_data;
-			int m_height, m_width;
+			int m_height{0}, m_width{0};
 			bool m_external{true};
 			std::string m_name{"unnamed-image"};
 
 		public:
-			// TODO: provide an empty ctor??
+			map_image() = default;
+
 			map_image(const mlk::data_packet& data, int height, int width) :
 				m_data(data),
 				m_height{height},
