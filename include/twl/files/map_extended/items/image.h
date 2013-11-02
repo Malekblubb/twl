@@ -43,6 +43,7 @@ namespace twl
 			int width() const noexcept {return m_width;}
 			bool external() const noexcept {return m_external;}
 			std::string name() const noexcept {return m_name;}
+			const mlk::data_packet& data() const noexcept {return m_data;}
 		};
 	}
 }
