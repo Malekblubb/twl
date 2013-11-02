@@ -46,12 +46,18 @@ namespace twl
 				m_layers.push_back(std::make_shared<map_layer<layer_type::base>>(layer));
 			}
 
-			template<typename T>
-			const T& layer_as(int index) const // TODO: add here some type- and bounds checking
-			{return std::static_pointer_cast<T>(m_layers.at(index));}
+			template<layer_type type, typename T = map_itm::map_layer<type>>
+			T layer_as(int index) const // TODO: add here some type- and bounds checking
+			{
+				T result{*std::static_pointer_cast<T>(m_layers.at(index))};
+				return result;
+			}
 
-			base_type layer(int index)
-			{return m_layers.at(index);}
+			map_layer<layer_type::base> layer(int index) const
+			{
+				map_layer<layer_type::base> result{*m_layers.at(index)};
+				return result;
+			}
 
 			const vec& layers() const noexcept {return m_layers;}
 
