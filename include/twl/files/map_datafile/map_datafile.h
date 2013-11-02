@@ -49,8 +49,8 @@ namespace twl
 				-> std::vector<map_datafile_item>
 				{return m_reader_impl.items_of_type<type>();}
 
-				mlk::data_packet get_item(int index)
-				{return m_reader_impl.get_item(index);}
+				const mlk::data_packet& item_at(int index) const
+				{return m_reader_impl.item_at(index);}
 
 				const mlk::data_packet& data_at(int index)
 				{return m_reader_impl.data_at(index);}

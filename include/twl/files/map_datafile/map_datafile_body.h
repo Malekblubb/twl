@@ -61,7 +61,7 @@ namespace twl
 					return result;
 				}
 
-				mlk::data_packet get_item(int index)
+				const mlk::data_packet& item_at(int index) const
 				{return m_item_area.data(index);}
 
 				// --- data ---
