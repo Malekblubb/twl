@@ -22,7 +22,8 @@ namespace twl
 		class map_group : public internal::map_item_base
 		{
 			// layer
-			using vec = std::vector<std::shared_ptr<map_layer<layer_type::base>>>; // TODO: c++14 std::unique_ptr
+			using base_type = std::shared_ptr<map_layer<layer_type::base>>;
+			using vec = std::vector<base_type>; // TODO: c++14 std::unique_ptr
 			vec m_layers;
 
 			// sepcs
@@ -48,6 +49,9 @@ namespace twl
 			template<typename T>
 			const T& layer_as(int index) const // TODO: add here some type- and bounds checking
 			{return std::static_pointer_cast<T>(m_layers.at(index));}
+
+			base_type layer(int index)
+			{return m_layers.at(index);}
 
 			const vec& layers() const noexcept {return m_layers;}
 
