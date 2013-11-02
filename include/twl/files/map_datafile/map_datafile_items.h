@@ -163,7 +163,7 @@ namespace twl
 				int offset_y() const noexcept {return m_offset_y;}
 				int para_x() const noexcept {return m_para_x;}
 				int para_y() const noexcept {return m_para_y;}
-				int start_layer() const noexcept {return m_start_layer;}
+				int start_layer() const noexcept {int ret = m_num_layers > 0 ?  m_start_layer : -1; return ret;}
 				int num_layers() const noexcept {return m_num_layers;}
 				int clipping() const noexcept {return m_clipping;}
 				int clip_x() const noexcept {return m_clip_x;}
