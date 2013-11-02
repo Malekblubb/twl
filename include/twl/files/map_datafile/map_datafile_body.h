@@ -44,6 +44,7 @@ namespace twl
 					m_header(header)
 				{this->process_data();}
 
+				// --- items ---
 				template<item_type type>
 				auto find_item()
 				-> std::pair<int, int>
@@ -62,6 +63,15 @@ namespace twl
 
 				mlk::data_packet get_item(int index)
 				{return m_item_area.data(index);}
+
+				// --- data ---
+				int data_size_at(int index)
+				{return m_ucmp_datasize_area.field(index);}
+
+				// get the COMPRESSED data at index
+				const mlk::data_packet& data_at(int index) const
+				{return m_data_area.field(index);}
+
 
 			private:
 				// process the input data

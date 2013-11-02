@@ -12,7 +12,10 @@
 
 #include <twl/files/datafile_base.h>
 
+#include <mlk/compression/compression.h>
 #include <mlk/log/log.h>
+
+#include <map>
 
 
 namespace twl
@@ -27,6 +30,8 @@ namespace twl
 
 				map_datafile_header m_header{{0}};
 				map_datafile_body m_body;
+				std::map<int, mlk::data_packet> m_ucmp_data;
+
 				bool m_valid{false};
 
 			public:
@@ -65,6 +70,16 @@ namespace twl
 				mlk::data_packet get_item(int index)
 				{return m_body.get_item(index);}
 
+				const mlk::data_packet& data_at(int index)
+				{
+					if(m_ucmp_data.find(index) != m_ucmp_data.end()) // data is already uncompressed
+						return m_ucmp_data[index];
+
+					// need to uncompress data
+					this->uncompress_data(index);
+					return m_ucmp_data[index];
+				}
+
 			private:
 				void parse_header()
 				{
@@ -85,6 +100,14 @@ namespace twl
 					mlk::data_packet data(m_header.body_size());
 					this->read(data);
 					m_body = map_datafile_body{data, m_header};
+				}
+
+				void uncompress_data(int index)
+				{
+					std::uint64_t ucmp_size{m_body.data_size_at(index)};
+					mlk::cmprs::compressor<mlk::cmprs::cmprs_mode::zlib> cmps{m_body.data_at(index)};
+					cmps.unpack(ucmp_size);
+					m_ucmp_data[index] = cmps.get();
 				}
 
 				// reader wrapper

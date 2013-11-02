@@ -52,6 +52,9 @@ namespace twl
 				mlk::data_packet get_item(int index)
 				{return m_reader_impl.get_item(index);}
 
+				const mlk::data_packet& data_at(int index)
+				{return m_reader_impl.data_at(index);}
+
 			private:
 				void open_read()
 				{
