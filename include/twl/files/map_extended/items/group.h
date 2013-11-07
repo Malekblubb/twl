@@ -43,7 +43,7 @@ namespace twl
 			{
 				static_assert(std::is_base_of<map_layer<layer_type::base>, map_layer<type>>::value,
 							  "invalid type passed to twl::file::map_group::add_layer<T>");
-				m_layers.push_back(std::static_pointer_cast<map_layer<layer_type::base>>(std::make_shared<map_layer<type>>(layer)));
+				m_layers.push_back(std::make_shared<map_layer<type>>(layer));
 			}
 
 			template<layer_type type, typename T = map_itm::map_layer<type>>
