@@ -28,7 +28,7 @@ namespace twl
 				std::size_t size{offset_cnt.size()};
 				std::vector<int> ret_vec;
 
-				for(int i{0}; i < size; ++i)
+				for(std::size_t i{0}; i < size; ++i)
 				{
 					if(i != size - 1)
 					{
