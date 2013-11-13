@@ -241,6 +241,15 @@ namespace twl
 				map_datafile_quad(const map_datafile_item& item)
 				{*this = make_item<map_datafile_quad>(item.data());}
 			};
+
+			class map_datafile_tile
+			{
+				unsigned char m_index, m_flags, m_skip, m_reserved;
+
+			public:
+				map_datafile_tile(const mlk::data_packet& data)
+				{*this = make_item<map_datafile_tile>(data);}
+			};
 		}
 	}
 }
