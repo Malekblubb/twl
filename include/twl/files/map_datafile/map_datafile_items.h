@@ -187,7 +187,7 @@ namespace twl
 				int m_width;
 				int m_height;
 				int m_flags;
-				// TODO: impl color
+				map_datafile_color m_color;
 				int m_color_env;
 				int m_color_env_offs;
 				int m_image;
