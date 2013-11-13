@@ -104,7 +104,7 @@ namespace twl
 
 				void uncompress_data(int index)
 				{
-					std::uint64_t ucmp_size{m_body.data_size_at(index)};
+					std::uint64_t ucmp_size{static_cast<std::uint64_t>(m_body.data_size_at(index))};
 					mlk::cmprs::compressor<mlk::cmprs::cmprs_mode::zlib> cmps{m_body.data_at(index)};
 					cmps.unpack(ucmp_size);
 					m_ucmp_data[index] = cmps.get();
