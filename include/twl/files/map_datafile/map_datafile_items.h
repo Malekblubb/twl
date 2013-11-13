@@ -102,6 +102,7 @@ namespace twl
 
 			class map_datafile_info
 			{
+				int m_version;
 				int m_author;
 				int m_map_version;
 				int m_credits;
@@ -120,6 +121,7 @@ namespace twl
 
 			class map_datafile_image
 			{
+				int m_version;
 				int m_width;
 				int m_height;
 				int m_external;
@@ -139,6 +141,7 @@ namespace twl
 
 			class map_datafile_group
 			{
+				int m_version;
 				int m_offset_x, m_offset_y;
 				int m_para_x, m_para_y;
 				int m_start_layer;
@@ -166,6 +169,7 @@ namespace twl
 
 			class basic_map_datafile_layer
 			{
+				int m_version;
 				int m_type;
 				int m_flags;
 
@@ -184,6 +188,7 @@ namespace twl
 			template<>
 			class map_datafile_layer<layer_type::tiles> : public basic_map_datafile_layer
 			{
+				int m_version;
 				int m_width;
 				int m_height;
 				int m_flags;
@@ -197,7 +202,7 @@ namespace twl
 			public:
 				map_datafile_layer(const map_datafile_item& item) :
 					basic_map_datafile_layer{item}
-				{ }
+				{*this = make_item<map_datafile_layer<layer_type::tiles>>(item.data());}
 
 				int width() const noexcept {return m_width;}
 				int height() const noexcept {return m_height;}
@@ -211,6 +216,7 @@ namespace twl
 			template<>
 			class map_datafile_layer<layer_type::quads> : public basic_map_datafile_layer
 			{
+				int m_version;
 				int m_num_quads;
 				int m_data;
 				int m_image;
@@ -219,7 +225,7 @@ namespace twl
 			public:
 				map_datafile_layer(const map_datafile_item& item) :
 					basic_map_datafile_layer{item}
-				{ }
+				{*this = make_item<map_datafile_layer<layer_type::quads>>(item.data());}
 
 				int num_quads() const noexcept {return m_num_quads;}
 				int data() const noexcept {return m_data;}
