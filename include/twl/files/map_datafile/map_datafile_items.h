@@ -76,20 +76,28 @@ namespace twl
 				const mlk::data_packet& data() const noexcept {return m_data;}
 			};
 
-			class map_datafile_quad
+			template<typename T>
+			T make_item(const mlk::data_packet& data)
+			{return *reinterpret_cast<const T*>(data.data());}
+
+			class map_datafile_color
 			{
-				int m_pos_env;
-				int m_pos_env_offs;
-				int m_color_env;
-				int m_color_env_offs;
+				int m_r, m_g, m_b, m_a;
 
 			public:
-				map_datafile_quad(const map_datafile_item& item) :
-					map_datafile_quad{item.data()}
-				{ }
+				int red() const noexcept {return m_r;}
+				int green() const noexcept {return m_g;}
+				int blue() const noexcept {return m_b;}
+				int alpha() const noexcept {return m_a;}
+			};
 
-				map_datafile_quad(const mlk::data_packet& data)
-				{ }
+			class map_datafile_point
+			{
+				int m_x, m_y;
+
+			public:
+				int x() const noexcept {return m_x;}
+				int y() const noexcept {return m_y;}
 			};
 
 			class map_datafile_info
@@ -101,16 +109,8 @@ namespace twl
 
 			public:
 				// construct with an item
-				map_datafile_info(const map_datafile_item& item) :
-					map_datafile_info{item.data()}
-				{ }
-
-				map_datafile_info(const mlk::data_packet& data) :
-					m_author{mlk::cnt::make_int(4, data)},
-					m_map_version{mlk::cnt::make_int(8, data)},
-					m_credits{mlk::cnt::make_int(12, data)},
-					m_license{mlk::cnt::make_int(16, data)}
-				{ }
+				map_datafile_info(const map_datafile_item& item)
+				{*this = make_item<map_datafile_info>(item.data());}
 
 				int author() const noexcept {return m_author;}
 				int map_version() const noexcept {return m_map_version;}
@@ -127,17 +127,8 @@ namespace twl
 				int m_image_data;
 
 			public:
-				map_datafile_image(const map_datafile_item& item) :
-					map_datafile_image{item.data()}
-				{ }
-
-				map_datafile_image(const mlk::data_packet& data) :
-					m_width{mlk::cnt::make_int(4, data)},
-					m_height{mlk::cnt::make_int(8, data)},
-					m_external{mlk::cnt::make_int(12, data)},
-					m_image_name{mlk::cnt::make_int(16, data)},
-					m_image_data{mlk::cnt::make_int(20, data)}
-				{ }
+				map_datafile_image(const map_datafile_item& item)
+				{*this = make_item<map_datafile_image>(item.data());}
 
 				int width() const noexcept {return m_width;}
 				int height() const noexcept {return m_height;}
@@ -157,23 +148,8 @@ namespace twl
 				// TODO: impl name
 
 			public:
-				map_datafile_group(const map_datafile_item& item) :
-					map_datafile_group{item.data()}
-				{ }
-
-				map_datafile_group(const mlk::data_packet& data) :
-					m_offset_x{mlk::cnt::make_int(4, data)},
-					m_offset_y{mlk::cnt::make_int(8, data)},
-					m_para_x{mlk::cnt::make_int(12, data)},
-					m_para_y{mlk::cnt::make_int(16, data)},
-					m_start_layer{mlk::cnt::make_int(20, data)},
-					m_num_layers{mlk::cnt::make_int(24, data)},
-					m_clipping{mlk::cnt::make_int(28, data)},
-					m_clip_x{mlk::cnt::make_int(32, data)},
-					m_clip_y{mlk::cnt::make_int(36, data)},
-					m_clip_w{mlk::cnt::make_int(40, data)},
-					m_clip_h{mlk::cnt::make_int(44, data)}
-				{ }
+				map_datafile_group(const map_datafile_item& item)
+				{*this = make_item<map_datafile_group>(item.data());}
 
 				int offset_x() const noexcept {return m_offset_x;}
 				int offset_y() const noexcept {return m_offset_y;}
@@ -194,14 +170,8 @@ namespace twl
 				int m_flags;
 
 			public:
-				basic_map_datafile_layer(const map_datafile_item& item) :
-					basic_map_datafile_layer{item.data()}
-				{ }
-
-				basic_map_datafile_layer(const mlk::data_packet& data) :
-					m_type{mlk::cnt::make_int(4, data)},
-					m_flags{mlk::cnt::make_int(8, data)}
-				{ }
+				basic_map_datafile_layer(const map_datafile_item& item)
+				{*this = make_item<basic_map_datafile_layer>(item.data());}
 
 				int type() const noexcept {return m_type;}
 				int flags() const noexcept {return m_flags;}
@@ -226,18 +196,7 @@ namespace twl
 
 			public:
 				map_datafile_layer(const map_datafile_item& item) :
-					map_datafile_layer{item.data()}
-				{ }
-
-				map_datafile_layer(const mlk::data_packet& data) :
-					basic_map_datafile_layer{data},
-					m_width{mlk::cnt::make_int(16, data)},
-					m_height{mlk::cnt::make_int(20, data)},
-					m_flags{mlk::cnt::make_int(24, data)},
-					m_color_env{mlk::cnt::make_int(40, data)},
-					m_color_env_offs{mlk::cnt::make_int(44, data)},
-					m_image{mlk::cnt::make_int(48, data)},
-					m_data{mlk::cnt::make_int(52, data)}
+					basic_map_datafile_layer{item}
 				{ }
 
 				int width() const noexcept {return m_width;}
@@ -259,14 +218,7 @@ namespace twl
 
 			public:
 				map_datafile_layer(const map_datafile_item& item) :
-					map_datafile_layer{item.data()}
-				{ }
-
-				map_datafile_layer(const mlk::data_packet& data) :
-					basic_map_datafile_layer{data},
-					m_num_quads{mlk::cnt::make_int(16, data)},
-					m_data{mlk::cnt::make_int(20, data)},
-					m_image{mlk::cnt::make_int(24, data)}
+					basic_map_datafile_layer{item}
 				{ }
 
 				int num_quads() const noexcept {return m_num_quads;}
@@ -274,40 +226,17 @@ namespace twl
 				int image() const noexcept {return m_image;}
 			};
 
-			class map_datafile_color
+			class map_datafile_quad
 			{
-				int m_r, m_g, m_b, m_a;
+
+
+				int m_pos_env;
+				int m_pos_env_offs;
+				int m_color_env;
+				int m_color_env_offs;
 
 			public:
-				map_color(const map_datafile_item& item) :
-					map_color{item.data()}
-				{ }
-
-				map_color(const mlk::data_packet& data) :
-					m_r{mlk::cnt::make_int(0, data)},
-					m_g{mlk::cnt::make_int(4, data)},
-					m_b{mlk::cnt::make_int(8, data)},
-					m_a{mlk::cnt::make_int(12, data)}
-				{ }
-
-				int red() const noexcept {return m_r;}
-				int green() const noexcept {return m_g;}
-				int blue() const noexcept {return m_b;}
-				int alpha() const noexcept {return m_a;}
-			};
-
-			class map_datafile_point
-			{
-				int m_x, m_y;
-
-			public:
-				map_datafile_point(const map_datafile_item& item) :
-					map_datafile_point{item.data()}
-				{ }
-
-				map_datafile_point(const mlk::data_packet& data) :
-					m_x{mlk::cnt::make_int(0, data)},
-					m_y{mlk::cnt::make_int(4, data)}
+				map_datafile_quad(const map_datafile_item& item)
 				{ }
 			};
 		}
