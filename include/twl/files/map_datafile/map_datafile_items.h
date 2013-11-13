@@ -228,7 +228,9 @@ namespace twl
 
 			class map_datafile_quad
 			{
-
+				map_datafile_point m_points[5];
+				map_datafile_color m_colors[4];
+				map_datafile_point m_texcoords[4];
 
 				int m_pos_env;
 				int m_pos_env_offs;
@@ -237,7 +239,7 @@ namespace twl
 
 			public:
 				map_datafile_quad(const map_datafile_item& item)
-				{ }
+				{*this = make_item<map_datafile_quad>(item.data());}
 			};
 		}
 	}
