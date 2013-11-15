@@ -108,8 +108,9 @@ namespace twl
 
 		public:
 			// construct with an item
-			map_datafile_info(const map_datafile_item& item)
-			{*this = make_item<map_datafile_info>(item.data());}
+			map_datafile_info(const map_datafile_item& item) :
+				map_datafile_info{make_item<map_datafile_info>(item.data())}
+			{ }
 
 			int author() const noexcept {return m_author;}
 			int map_version() const noexcept {return m_map_version;}
@@ -127,8 +128,9 @@ namespace twl
 			int m_image_data;
 
 		public:
-			map_datafile_image(const map_datafile_item& item)
-			{*this = make_item<map_datafile_image>(item.data());}
+			map_datafile_image(const map_datafile_item& item) :
+				map_datafile_image{make_item<map_datafile_image>(item.data())}
+			{ }
 
 			int width() const noexcept {return m_width;}
 			int height() const noexcept {return m_height;}
@@ -149,8 +151,9 @@ namespace twl
 			// TODO: impl name
 
 		public:
-			map_datafile_group(const map_datafile_item& item)
-			{*this = make_item<map_datafile_group>(item.data());}
+			map_datafile_group(const map_datafile_item& item) :
+				map_datafile_group{make_item<map_datafile_group>(item.data())}
+			{ }
 
 			int offset_x() const noexcept {return m_offset_x;}
 			int offset_y() const noexcept {return m_offset_y;}
@@ -172,8 +175,9 @@ namespace twl
 			int m_flags;
 
 		public:
-			basic_map_datafile_layer(const map_datafile_item& item)
-			{*this = make_item<basic_map_datafile_layer>(item.data());}
+			basic_map_datafile_layer(const map_datafile_item& item) :
+				basic_map_datafile_layer{make_item<basic_map_datafile_layer>(item.data())}
+			{ }
 
 			int type() const noexcept {return m_type;}
 			int flags() const noexcept {return m_flags;}
@@ -242,8 +246,9 @@ namespace twl
 			int m_color_env_offs;
 
 		public:
-			map_datafile_quad(const map_datafile_item& item)
-			{*this = make_item<map_datafile_quad>(item.data());}
+			map_datafile_quad(const map_datafile_item& item) :
+				map_datafile_quad{make_item<map_datafile_quad>(item.data())}
+			{ }
 		};
 
 		class map_datafile_tile
@@ -251,8 +256,9 @@ namespace twl
 			unsigned char m_index, m_flags, m_skip, m_reserved;
 
 		public:
-			map_datafile_tile(const mlk::data_packet& data)
-			{*this = make_item<map_datafile_tile>(data);}
+			map_datafile_tile(const mlk::data_packet& data) :
+				map_datafile_tile{make_item<map_datafile_tile>(data)}
+			{ }
 		};
 	}
 }
