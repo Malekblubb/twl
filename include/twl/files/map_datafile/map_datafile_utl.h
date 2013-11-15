@@ -16,34 +16,32 @@
 
 namespace twl
 {
-	namespace file
+	namespace internal
 	{
-		namespace internal
+		// calc the length of the data sections from the given offsets
+		// offsets must be sortet like: 0, 10, 24, 26, 30, 50
+		inline auto calc_data_length(const std::vector<int>& offset_cnt, int data_area_len)
+		-> std::vector<int>
 		{
-			// calc the length of the data sections from the given offsets
-			// offsets must be sortet like: 0, 10, 24, 26, 30, 50
-			inline auto calc_data_length(const std::vector<int>& offset_cnt, int data_area_len)
-			-> std::vector<int>
+			std::size_t size{offset_cnt.size()};
+			std::vector<int> ret_vec;
+
+			for(std::size_t i{0}; i < size; ++i)
 			{
-				std::size_t size{offset_cnt.size()};
-				std::vector<int> ret_vec;
-
-				for(std::size_t i{0}; i < size; ++i)
+				if(i != size - 1)
 				{
-					if(i != size - 1)
-					{
-						ret_vec.push_back(offset_cnt.at(i + 1) - offset_cnt.at(i));
-						continue;
-					}
-
-					// last element
-					ret_vec.push_back(data_area_len - offset_cnt.at(i));
+					ret_vec.push_back(offset_cnt.at(i + 1) - offset_cnt.at(i));
+					continue;
 				}
 
-				return ret_vec;
+				// last element
+				ret_vec.push_back(data_area_len - offset_cnt.at(i));
 			}
+
+			return ret_vec;
 		}
 	}
+
 }
 
 

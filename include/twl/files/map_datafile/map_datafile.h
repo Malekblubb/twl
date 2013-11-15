@@ -18,58 +18,55 @@
 
 namespace twl
 {
-	namespace file
+	namespace internal
 	{
-		namespace internal
+		class map_datafile
 		{
-			class map_datafile
+			map_datafile_reader m_reader_impl;
+			bool m_valid{false};
+
+		public:
+			template<typename T>
+			map_datafile(const T& file) :
+				m_reader_impl{file}
 			{
-				map_datafile_reader m_reader_impl;
-				bool m_valid{false};
-
-			public:
-				template<typename T>
-				map_datafile(const T& file) :
-					m_reader_impl{file}
+				if(m_reader_impl.exists())
 				{
-					if(m_reader_impl.exists())
-					{
-						this->open_read();
-						m_valid = m_reader_impl.valid();
-					}
+					this->open_read();
+					m_valid = m_reader_impl.valid();
 				}
+			}
 
-				template<item_type type>
-				auto find_item()
-				-> std::pair<int, int>
-				{return m_reader_impl.find_item<type>();}
+			template<item_type type>
+			auto find_item()
+			-> std::pair<int, int>
+			{return m_reader_impl.find_item<type>();}
 
-				template<item_type type>
-				auto items_of_type()
-				-> std::vector<map_datafile_item>
-				{return m_reader_impl.items_of_type<type>();}
+			template<item_type type>
+			auto items_of_type()
+			-> std::vector<map_datafile_item>
+			{return m_reader_impl.items_of_type<type>();}
 
-				const mlk::data_packet& item_at(int index) const
-				{return m_reader_impl.item_at(index);}
+			const mlk::data_packet& item_at(int index) const
+			{return m_reader_impl.item_at(index);}
 
-				const mlk::data_packet& data_at(int index)
-				{return m_reader_impl.data_at(index);}
+			const mlk::data_packet& data_at(int index)
+			{return m_reader_impl.data_at(index);}
 
-			private:
-				void open_read()
-				{
-					m_reader_impl.parse_file();
-				}
+		private:
+			void open_read()
+			{
+				m_reader_impl.parse_file();
+			}
 
-				void open_write()
-				{
+			void open_write()
+			{
 
-				}
+			}
 
-			public:
-				bool valid() const noexcept {return m_valid;}
-			};
-		}
+		public:
+			bool valid() const noexcept {return m_valid;}
+		};
 	}
 }
 

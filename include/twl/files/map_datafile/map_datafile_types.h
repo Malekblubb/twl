@@ -9,33 +9,32 @@
 
 namespace twl
 {
-	namespace file
+	enum class item_type : int
 	{
-		enum class item_type : int
-		{
-			version = 0,
-			info,
-			image,
-			envelope,
-			group,
-			layer,
-			envpoints
-		};
+		version = 0,
+		info,
+		image,
+		envelope,
+		group,
+		layer,
+		envpoints
+	};
 
-		enum class layer_type : int
-		{
-			invalid = 0,
-			game,
-			tiles,
-			quads
-		};
+	enum class layer_type : int
+	{
+		invalid = 0,
+		game,
+		tiles,
+		quads,
 
-		enum class layer_flags : int
-		{detail = 1};
+		base
+	};
 
-		enum class tile_layer_flags : int
-		{is_game_layer = 1};
-	}
+	enum class layer_flags : int
+	{detail = 1};
+
+	enum class tile_layer_flags : int
+	{is_game_layer = 1};
 }
 
 

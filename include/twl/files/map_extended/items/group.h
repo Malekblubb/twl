@@ -22,7 +22,7 @@ namespace twl
 		class map_group : public internal::map_item_base
 		{
 			// layer
-			using base_type = std::shared_ptr<map_layer<layer_type::base>>;
+			using base_type = std::shared_ptr<map_layer_base>;
 			using vec = std::vector<base_type>; // TODO: c++14 std::unique_ptr
 			vec m_layers;
 
@@ -34,15 +34,14 @@ namespace twl
 			int m_clip_x, m_clip_y, m_clip_w, m_clip_h;
 			std::string	m_name;
 
-
 		public:
 			map_group() = default;
 
 			template<layer_type type>
 			void add_layer(const map_layer<type>& layer) noexcept
 			{
-				static_assert(std::is_base_of<map_layer<layer_type::base>, map_layer<type>>::value,
-							  "invalid type passed to twl::file::map_group::add_layer<T>");
+				static_assert(std::is_base_of<map_layer_base, map_layer<type>>(),
+							  "invalid type passed to twl::map_group::add_layer<T>");
 				m_layers.push_back(std::make_shared<map_layer<type>>(layer));
 			}
 
@@ -50,7 +49,7 @@ namespace twl
 			T layer_as(int index) const // TODO: add here some type- and bounds checking
 			{return *std::static_pointer_cast<T>(m_layers.at(index));}
 
-			map_layer<layer_type::base> layer(int index) const
+			map_layer_base layer(int index) const
 			{return *m_layers.at(index);}
 
 			const vec& layers() const noexcept {return m_layers;}

@@ -12,6 +12,7 @@
 
 #include <twl/files/map_datafile/map_datafile_types.h>
 
+#include <mlk/graphics/color.h>
 #include <mlk/tools/enum_utl.h>
 
 
@@ -19,14 +20,13 @@ namespace twl
 {
 	namespace map_itm
 	{
-		using layer_type = file::layer_type;
+		using layer_type = layer_type;
 
 
 		template<layer_type type>
 		class map_layer{public: map_layer() = delete;};
 
-		template<>
-		class map_layer<layer_type::base>
+		class map_layer_base
 		{
 		protected:
 			int m_type{0};
@@ -36,7 +36,7 @@ namespace twl
 			std::string m_name;
 
 		public:
-			map_layer(int type, std::string name) :
+			map_layer_base(int type, std::string name) :
 				m_type{type},
 				m_name{std::move(name)}
 			{ }
@@ -56,16 +56,16 @@ namespace twl
 		};
 
 		template<>
-		class map_layer<layer_type::tiles> : public map_layer<layer_type::base>
+		class map_layer<layer_type::tiles> : public map_layer_base
 		{
 			int m_width{100}, m_height{100};
 			bool m_is_game_layer{false};
-			// TODO: color
+			mlk::gcs::color_rgb m_color;
 
 
 		public:
 			map_layer(bool is_game = false, std::string name = "Tiles") :
-				map_layer<layer_type::base>{mlk::enum_utl::to_int(layer_type::tiles), std::move(name)},
+				map_layer_base{mlk::enum_utl::to_int(layer_type::tiles), std::move(name)},
 				m_is_game_layer{is_game}
 			{ }
 
@@ -80,12 +80,16 @@ namespace twl
 
 
 		template<>
-		class map_layer<layer_type::quads> : public map_layer<layer_type::base>
+		class map_layer<layer_type::quads> : public map_layer_base
 		{
+			int m_num_quads{0};
+
 		public:
 			map_layer(std::string name = "Quads") :
-				map_layer<layer_type::base>{mlk::enum_utl::to_int(layer_type::quads), std::move(name)}
+				map_layer_base{mlk::enum_utl::to_int(layer_type::quads), std::move(name)}
 			{ }
+
+			int num_quads() const noexcept {return m_num_quads;}
 		};
 	}
 }

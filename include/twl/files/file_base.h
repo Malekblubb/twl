@@ -15,24 +15,21 @@
 
 namespace twl
 {
-	namespace file
+	namespace internal
 	{
-		namespace internal
+		class file_base
 		{
-			class file_base
-			{
-			protected:
-				std::string m_path;
+		protected:
+			std::string m_path;
 
-			public:
-				template<typename T>
-				file_base(const T& file) :
-					m_path{mlk::fs::as_path(file)}
-				{ }
+		public:
+			template<typename T>
+			file_base(const T& file) :
+				m_path{mlk::fs::as_path(file)}
+			{ }
 
-				bool exists() const noexcept {return mlk::fs::fs_handle<mlk::fs::fs_type::file>{m_path}.exists();}
-			};
-		}
+			bool exists() const noexcept {return mlk::fs::fs_handle<mlk::fs::fs_type::file>{m_path}.exists();}
+		};
 	}
 }
 

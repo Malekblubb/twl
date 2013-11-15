@@ -13,63 +13,111 @@
 #include <twl/files/map_datafile/map_datafile.h>
 #include <twl/files/map_datafile/map_datafile_types.h>
 
+#include <mlk/log/log.h>
+
+#include <map>
+#include <string>
+#include <vector>
+
 
 namespace twl
 {
-	namespace file
+	class map
 	{
-		class map
+		// uderlaying datafile
+		internal::map_datafile m_datafile{""};
+
+		bool m_valid{false};
+
+		// items
+		// groups
+		std::vector<map_itm::map_group> m_groups;
+
+		// images
+		std::map<std::string, map_itm::map_image> m_images;
+
+
+	public:
+		// provide an empty ctor
+		map() = default;
+
+		template<typename T>
+		map(const T& file) :
+			m_datafile{file}
 		{
-			// uderlaying datafile
-			internal::map_datafile m_datafile{""};
+			if(m_datafile.valid())
+				this->process_datafile();
+		}
 
-			bool m_valid{false};
-
-			// items
-			// groups
-			std::vector<map_itm::map_group> m_groups;
-
-			// images
-
+	private:
+		void process_datafile()
+		{
+			auto groups(m_datafile.items_of_type<item_type::group>());
+			auto layers(m_datafile.items_of_type<item_type::layer>());
+			int layer_start{m_datafile.find_item<item_type::layer>().first};
 
 
-		public:
-			// provide an empty ctor
-			map() = default;
 
-			template<typename T>
-			map(const T& file) :
-				m_datafile{file}
+			for(auto& a : groups)
 			{
-				if(m_datafile.valid())
-					this->process_datafile();
-			}
+				// construct new group
+				internal::map_datafile_group basic_group{a};
+				auto ext_group(internal::make_group(basic_group));
+				ext_group.set_order(this->num_groups()); // set the order manually
 
-		private:
-			void process_datafile()
-			{
-				auto groups = m_datafile.items_of_type<item_type::group>();
 
-				for(auto& a : groups)
+				// TODO: maybe do the layers better one day
+				for(int i{0}; i < basic_group.num_layers(); ++i)
 				{
-					// construct new group
-					internal::map_datafile_group basic_group{a};
-					map_itm::map_group ext_group{map_utl::internal::make_group(basic_group)};
-					ext_group.set_order(m_groups.size()); // set the order manually
-					m_groups.push_back(ext_group); // save this group
+					int layer_index{basic_group.start_layer() + i};
+					internal::basic_map_datafile_layer basic_layer{layers[layer_index]};
 
-//					std::cout << m_groups.back().clip_x() << std::endl;
+					std::cout << basic_layer.type() << std::endl;
+
+					if(basic_layer.type() == mlk::enum_utl::to_int(layer_type::tiles))
+					{
+						internal::map_datafile_layer<layer_type::tiles> tmp_basic{layers[layer_index]};
+						auto ext_layer = internal::make_layer(tmp_basic);
+						ext_layer.set_group_index(this->num_groups());
+						ext_layer.set_order(i);
+						ext_group.add_layer(ext_layer);
+					}
+					else if(basic_layer.type() == mlk::enum_utl::to_int(layer_type::quads))
+					{
+						internal::map_datafile_layer<layer_type::quads> tmp_basic{layers[layer_index]};
+						auto ext_layer = internal::make_layer(tmp_basic);
+						ext_layer.set_group_index(this->num_groups());
+						ext_layer.set_order(i);
+						ext_group.add_layer(ext_layer);
+					}
+					else
+					{
+						mlk::lerr() << "invalid layer, aborting";
+						m_valid = false;
+						return;
+					}
 				}
 
-
-				m_valid = true;
+				this->add_group(ext_group); // save this group
 			}
 
 
-		public:
-			bool valid() const noexcept {return m_valid;}
-		};
-	}
+			m_valid = true;
+		}
+
+
+	public:
+		void add_group(const map_itm::map_group& group) noexcept
+		{m_groups.push_back(group);}
+
+		const map_itm::map_group& group_at(int index) const noexcept
+		{return m_groups.at(index);} // TODO
+
+		std::size_t num_groups() const noexcept
+		{return m_groups.size();}
+
+		bool valid() const noexcept {return m_valid;}
+	};
 }
 
 
