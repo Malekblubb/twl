@@ -9,5 +9,7 @@
 
 #include "files/files.h"
 
+#include "network/network.h"
+
 
 #endif // TWL_TWL_H
