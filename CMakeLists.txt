@@ -7,8 +7,9 @@ set(CMAKE_CXX_FLAGS "-std=c++0x")
 set(SRC "src")
 set(HDR "include")
 set(EXT_MLK "external/mlk/include")
+set(EXT_TW "external/teeworlds/src")
 set(LIST "")
-include_directories(${HDR} ${EXT_MLK})
+include_directories(${HDR} ${EXT_MLK} ${EXT_TW})
 
 
 file(GLOB_RECURSE LIST "${HDR}/*.*")
