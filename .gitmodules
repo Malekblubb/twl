@@ -1,3 +1,6 @@
 [submodule "external/mlk"]
 	path = external/mlk
 	url = git://github.com/Malekblubb/mlk.git
+[submodule "external/teeworlds"]
+	path = external/teeworlds
+	url = git://github.com/teeworlds/teeworlds.git
