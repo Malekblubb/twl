@@ -9,27 +9,57 @@
 
 #include <mlk/types/types.h>
 
+#include <algorithm>
+#include <iostream>
 
 namespace twl
 {
 	namespace internal
 	{
-		class server_rep
+		enum class rep_type : int
+		{list, count, info};
+
+		class server_rep_base
 		{
-			mlk::data_packet m_rep_data;
+			// connless bytes(first 6) are directly here
+			mlk::data_packet m_rep_data{0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
 
 		public:
-			server_rep(const mlk::data_packet& rep_data) :
-				m_rep_data{rep_data}
+			server_rep_base(const mlk::data_packet& rep_data)
+			{m_rep_data.insert(m_rep_data.end(), rep_data.begin(), rep_data.end());}
+
+			bool operator==(const mlk::data_packet& data)
+			{return std::equal(m_rep_data.begin(), m_rep_data.end(), data.begin());}
+		};
+
+		template<rep_type type>
+		struct server_rep : public server_rep_base
+		{server_rep() = delete;};
+
+		// master replies
+		template<>
+		struct server_rep<rep_type::list> : public server_rep_base
+		{
+			server_rep() :
+				server_rep_base{{'l', 'i', 's', '2'}}
 			{ }
+		};
 
-			const mlk::data_packet& reply_data() const noexcept {return m_rep_data;}
+		template<>
+		struct server_rep<rep_type::count> : public server_rep_base
+		{
+			server_rep() :
+				server_rep_base{{'s', 'i', 'z', '2'}}
+			{ }
+		};
 
-			bool operator==(const server_rep& o) const noexcept
-			{return m_rep_data == o.m_rep_data;}
-
-			bool operator!=(const server_rep& o) const noexcept
-			{return m_rep_data != o.m_rep_data;}
+		// server replies
+		template<>
+		struct server_rep<rep_type::info> : public server_rep_base
+		{
+			server_rep() :
+				server_rep_base{{'i', 'n', 'f', '3'}}
+			{ }
 		};
 	}
 }
