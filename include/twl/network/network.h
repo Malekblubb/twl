@@ -7,8 +7,8 @@
 #define TWL_NETWORK_NETWORK_H
 
 
+#include "master_server.h"
 #include "server.h"
-#include "server_request.h"
 #include "server_info.h"
 
 
