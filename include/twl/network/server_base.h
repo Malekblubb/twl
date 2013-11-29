@@ -8,47 +8,69 @@
 
 
 #include "basic_connection.h"
-
-#include <future>
+#include "basic_server_entry.h"
 
 
 namespace twl
 {
+	using ip_list = std::vector<mlk::ntw::ip_address>;
+
 	namespace internal
 	{
 		class server_base
 		{
 			basic_connection m_connection;
-			std::vector<mlk::ntw::ip_address> m_servers; // added servers
-			mlk::slot<void(mlk::data_packet&)> m_on_recv;
+			mlk::slot<const mlk::data_packet&, const mlk::ntw::ip_address&> m_on_recv;
+
+		protected:
+			std::vector<internal::basic_server_entry> m_servers;
 
 		public:
 			server_base(const mlk::ntw::packet& packet) :
 				m_connection{packet}
 			{
-				m_on_recv += [this](const mlk::data_packet& data){this->make_entry(data);};
+				m_on_recv += [this](const mlk::data_packet& data, const mlk::ntw::ip_address& address)
+				{this->on_received(data, address);};
 				mlk::link_signal(m_connection.m_received, m_on_recv);
 			}
 
-			void add(const mlk::ntw::ip_address& server_address)
-			{m_servers.push_back(server_address);}
+			virtual ~server_base() = default;
+
+			void add(const mlk::ntw::ip_address& address)
+			{m_servers.push_back({address});}
 
 		protected:
-			void send_reuest()
+			void set_connection_packet(const mlk::ntw::packet& packet)
+			{m_connection.set_packet(packet);}
+
+			void refresh()
 			{
 				for(auto& a : m_servers)
-					if(!m_connection.send(a))
-						return;
-
-				std::async(std::launch::async,
-				[this]
 				{
-					m_connection.recv();
-				});
+					m_connection.send(a.address());
+					a.on_send();
+				}
+
+				m_connection.start_recv();
 			}
 
 		private:
-			virtual void make_entry(const mlk::data_packet& data) = 0;
+			void on_received(const mlk::data_packet& data, const mlk::ntw::ip_address& address)
+			{
+				// find the server in the list
+				for(auto& a : m_servers)
+					if(a.address() == address)
+					{
+						a.on_recv();
+						a.data() = data;
+
+						// call custom make entry function
+						this->make_entry(a);
+						return;
+					}
+			}
+
+			virtual void make_entry(const internal::basic_server_entry& entry) = 0;
 		};
 	}
 }
