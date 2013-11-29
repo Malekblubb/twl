@@ -3,8 +3,8 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_NETWORK_BASIC_SERVER_INFO_H
-#define TWL_NETWORK_BASIC_SERVER_INFO_H
+#ifndef TWL_NETWORK_SERVER_INFO_H
+#define TWL_NETWORK_SERVER_INFO_H
 
 
 #include "client_info.h"
@@ -42,4 +42,4 @@ namespace twl
 }
 
 
-#endif // TWL_NETWORK_BASIC_SERVER_INFO_H
+#endif // TWL_NETWORK_SERVER_INFO_H

@@ -3,8 +3,8 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_NETWORK_BASIC_CLIENT_INFO_H
-#define TWL_NETWORK_BASIC_CLIENT_INFO_H
+#ifndef TWL_NETWORK_CLIENT_INFO_H
+#define TWL_NETWORK_CLIENT_INFO_H
 
 
 #include <string>
@@ -20,13 +20,9 @@ namespace twl
 		int country;
 		int score;
 		int is_player;
-
-
-
-
 	};
 }
 
 
 
-#endif // TWL_NETWORK_BASIC_CLIENT_INFO_H
+#endif // TWL_NETWORK_CLIENT_INFO_H
