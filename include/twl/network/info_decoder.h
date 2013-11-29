@@ -7,24 +7,21 @@
 #define TWL_NETWORK_INFO_DECODER_H
 
 
-#include "basic_server_info.h"
 #include "network_utl.h"
 #include "server_base.h"
 
 #include <mlk/containers/container_utl.h>
+#include <mlk/tools/type_utl.h>
 #include <mlk/types/types.h>
 
 
 namespace twl
 {
+	class server_info;
+
 	namespace internal
 	{
-		inline bool decode_server_info(const basic_server_entry& data, basic_server_info& info)
-		{
-
-			std::cout << "test: " << data.data()[15] << std::endl;
-			info.m_name = "TEST";
-		}
+		inline bool decode_server_info(const basic_server_entry &entry, server_info &info);
 
 		inline bool decode_list_info(const mlk::data_packet& data, ip_list& list)
 		{
