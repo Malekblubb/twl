@@ -3,51 +3,43 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_NETWORK_SERVER_INFO_H
-#define TWL_NETWORK_SERVER_INFO_H
+#ifndef TWL_NETWORK_BASIC_SERVER_INFO_H
+#define TWL_NETWORK_BASIC_SERVER_INFO_H
 
 
-#include "basic_server_info.h"
+#include "client_info.h"
 #include "info_decoder.h"
 
-#include <mlk/types/types.h>
-
 #include <string>
+#include <vector>
 
 
 namespace twl
 {
-	class server_info;
-	namespace internal
-	{server_info make_info(const mlk::data_packet&);}
-
-	class server_info
+	// just for internal usage
+	struct server_info
 	{
-		internal::basic_server_info m_basic_info;
-
-		friend server_info internal::make_info(const mlk::data_packet&);
-		server_info(const internal::basic_server_info& basic_info) :
-			m_basic_info(basic_info)
-		{ }
-
-	public:
-		server_info() = default;
-
-		// getters
-		const auto name() const noexcept -> decltype((m_basic_info.m_name)) {return m_basic_info.m_name;}
-		const auto game_type() const noexcept -> decltype((m_basic_info.m_game_type)) {return m_basic_info.m_game_type;}
+		std::string name;
+		std::string game_type;
+		std::string map_name;
+		std::string version;
+		int max_clients{0};
+		int num_clients{0};
+		int max_players{0};
+		int num_players{0};
+		std::vector<client_info> clients;
 	};
 
 	namespace internal
 	{
-		server_info make_info(const mlk::data_packet& data)
+		server_info make_info(const basic_server_entry& entry)
 		{
-			basic_server_info basic;
-			decode_server_info(data, basic);
-			return {basic};
+			server_info tmp;
+			decode_server_info(entry, tmp);
+			return tmp;
 		}
 	}
 }
 
 
-#endif // TWL_NETWORK_SERVER_INFO_H
+#endif // TWL_NETWORK_BASIC_SERVER_INFO_H
