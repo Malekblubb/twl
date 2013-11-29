@@ -8,7 +8,8 @@
 
 
 #include "server_base.h"
-#include "server_request.h"
+#include "server_info.h"
+
 
 #include <mlk/tools/random_utl.h>
 
@@ -18,25 +19,29 @@ namespace twl
 	class server : public internal::server_base
 	{
 		unsigned char m_token{mlk::rnd<unsigned char>(0, 9)}; // get random token
+		server_info m_info;
 
 	public:
-		server() :
+		server(const mlk::ntw::ip_address& address) :
 			internal::server_base{mlk::ntw::packet{internal::server_req<internal::req_type::info>{}.request_data()}.add({m_token})}
-		{ }
+		{this->set_address(address);}
 
-		void get_info()
+		void add(const mlk::ntw::ip_address &address) = delete;
+		void set_address(const mlk::ntw::ip_address& address)
+		{m_servers.clear(); m_servers.push_back(address);}
+
+		const server_info& get_info() noexcept
 		{
-			this->send_reuest();
-
+			this->refresh();
+			return m_info;
 		}
 
 	private:
-		void make_entry(const mlk::data_packet &data) override
-		{
-			std::cout << "got entry" << std::endl;
-		}
+		void make_entry(const internal::basic_server_entry &entry)
+		{m_info = internal::make_info(entry);}
 	};
 }
+
 
 
 #endif // TWL_NETWORK_SERVER_H
