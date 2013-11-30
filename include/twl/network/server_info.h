@@ -16,7 +16,6 @@
 
 namespace twl
 {
-	// just for internal usage
 	struct server_info
 	{
 		std::string name;
@@ -27,6 +26,7 @@ namespace twl
 		int num_clients{0};
 		int max_players{0};
 		int num_players{0};
+		float ping;
 		std::vector<client_info> clients;
 	};
 
@@ -36,6 +36,7 @@ namespace twl
 		{
 			server_info tmp;
 			decode_server_info(entry, tmp);
+			tmp.ping = entry.ping(); // no 'decoding' stuff
 			return tmp;
 		}
 	}

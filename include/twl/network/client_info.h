@@ -12,7 +12,6 @@
 
 namespace twl
 {
-
 	struct client_info
 	{
 		std::string name;

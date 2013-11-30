@@ -39,8 +39,8 @@ namespace twl
 			void on_recv() noexcept
 			{m_recv_pnt = mlk::tm::time_pnt();}
 
-			auto ping() const noexcept -> decltype(mlk::tm::duration(m_send_pnt, m_recv_pnt))
-			{return mlk::tm::duration(m_send_pnt, m_recv_pnt);}
+			auto ping() const noexcept -> decltype(mlk::tm::duration_as<float>(m_send_pnt, m_recv_pnt))
+			{return mlk::tm::duration_as<float>(m_send_pnt, m_recv_pnt);}
 
 			auto address() const noexcept -> decltype((m_address))
 			{return m_address;}
