@@ -23,7 +23,7 @@ namespace twl
 	{
 		class basic_connection
 		{
-			enum : std::size_t {max_recv_len = 2048};
+			static constexpr std::size_t max_recv_len{2048};
 			mlk::ntw::sock<mlk::ntw::sock_type::udp, false> m_socket;
 			mlk::ntw::packet m_req_packet;
 			mlk::ntw::ip_address m_from;
