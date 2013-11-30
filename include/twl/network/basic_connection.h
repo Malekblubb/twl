@@ -23,7 +23,7 @@ namespace twl
 	{
 		class basic_connection
 		{
-			static constexpr std::size_t max_recv_len{2048};
+			static constexpr std::size_t m_max_recv_len{2048};
 			mlk::ntw::sock<mlk::ntw::sock_type::udp, false> m_socket;
 			mlk::ntw::packet m_req_packet;
 			mlk::ntw::ip_address m_from;
@@ -62,7 +62,7 @@ namespace twl
 					while(!timed_out())
 					{
 						m_from.reset();
-						m_socket.recv(m_from, tmp_data, max_recv_len);
+						m_socket.recv(m_from, tmp_data, m_max_recv_len);
 						if(!m_socket.error())
 							mlk::emit_signal(m_received, tmp_data, m_from);
 					}
