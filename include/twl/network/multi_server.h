@@ -38,7 +38,7 @@ namespace twl
 
 	private:
 		void make_entry(const internal::basic_server_entry& entry) override
-		{/*m_infos.push_back(internal::make_info(entry));*/}
+		{m_infos.push_back(internal::make_info(entry));}
 	};
 }
 
