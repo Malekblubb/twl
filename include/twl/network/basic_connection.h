@@ -65,8 +65,8 @@ namespace twl
 						m_socket.recv(m_from, tmp_data, m_max_recv_len);
 						if(!m_socket.error())
 							mlk::emit_signal(m_received, tmp_data, m_from);
+						mlk::tm::sleep(1); // dont spam the cpu
 					}
-
 					if(this->timed_out())
 						break;
 				}
