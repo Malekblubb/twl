@@ -28,6 +28,10 @@ namespace twl
 		int num_players{0};
 		float ping;
 		std::vector<client_info> clients;
+
+		bool m_empty{true};
+		bool is_valid() const noexcept
+		{return !m_empty;}
 	};
 
 	namespace internal
@@ -37,6 +41,7 @@ namespace twl
 			server_info tmp;
 			decode_server_info(entry, tmp);
 			tmp.ping = entry.ping(); // no 'decoding' stuff
+			tmp.m_empty = false;
 			return tmp;
 		}
 	}
