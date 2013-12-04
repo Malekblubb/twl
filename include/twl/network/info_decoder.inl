@@ -67,6 +67,7 @@ namespace twl
 				info.clients.push_back({dsi.get_next(), dsi.get_next(),
 										mlk::stl_string::to_int(dsi.get_next()), mlk::stl_string::to_int(dsi.get_next()), mlk::stl_string::to_int(dsi.get_next())});
 			}
+			return true;
 		}
 	}
 }
