@@ -20,12 +20,11 @@ namespace twl
 		{
 			mlk::data_packet m_data;
 			std::size_t m_current{0};
-			bool m_valid{false};
 
 		public:
 			dsi_helper(const mlk::data_packet& data) :
 				m_data(data)
-			{m_valid = this->get_next().find("0.6"); /*goto version*/}
+			{this->get_next(); /*goto version*/}
 
 			std::string get_next() noexcept
 			{
@@ -33,7 +32,7 @@ namespace twl
 				{
 					std::string result;
 					auto null_pos(std::find(m_data.begin() + m_current, m_data.end(), 0));
-					for(auto begin(m_data.begin() + m_current); begin != null_pos && m_current != m_data.size(); ++begin)
+					for(auto begin(m_data.begin() + m_current); begin != null_pos; ++begin)
 					{
 						result += *begin;
 						m_current++;
@@ -46,7 +45,7 @@ namespace twl
 
 		private:
 			bool valid() const noexcept
-			{return m_valid && m_data.size() != m_current;}
+			{return m_data.size() != m_current;}
 		};
 
 
