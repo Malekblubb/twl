@@ -20,24 +20,38 @@ namespace twl
 		{
 			mlk::data_packet m_data;
 			std::size_t m_current{0};
+			bool m_valid{false};
 
 		public:
 			dsi_helper(const mlk::data_packet& data) :
 				m_data(data)
-			{this->get_next();} // goto version
+			{
+				if(!this->get_next().find("0.6")) // goto version
+					m_valid = false;
+				else
+					m_valid = true;
+			}
 
 			std::string get_next() noexcept
 			{
-				std::string result;
-				auto null_pos(std::find(m_data.begin() + m_current, m_data.end(), 0));
-				for(auto begin(m_data.begin() + m_current); begin != null_pos; ++begin)
+				if(this->valid())
 				{
-					result += *begin;
+					std::string result;
+					auto null_pos(std::find(m_data.begin() + m_current, m_data.end(), 0));
+					for(auto begin(m_data.begin() + m_current); begin != null_pos && m_current != m_data.size(); ++begin)
+					{
+						result += *begin;
+						m_current++;
+					}
 					m_current++;
+					return result;
 				}
-				m_current++;
-				return result;
+				return "";
 			}
+
+		private:
+			bool valid() const noexcept
+			{return m_valid && m_data.size() != m_current;}
 		};
 
 
@@ -57,7 +71,7 @@ namespace twl
 			for(auto i(0); i < info.num_clients; ++i)
 			{
 				info.clients.push_back({dsi.get_next(), dsi.get_next(),
-									   mlk::stl_string::to_int(dsi.get_next()), mlk::stl_string::to_int(dsi.get_next()), mlk::stl_string::to_int(dsi.get_next())});
+										mlk::stl_string::to_int(dsi.get_next()), mlk::stl_string::to_int(dsi.get_next()), mlk::stl_string::to_int(dsi.get_next())});
 			}
 		}
 	}
