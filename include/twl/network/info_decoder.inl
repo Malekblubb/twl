@@ -25,12 +25,7 @@ namespace twl
 		public:
 			dsi_helper(const mlk::data_packet& data) :
 				m_data(data)
-			{
-				if(!this->get_next().find("0.6")) // goto version
-					m_valid = false;
-				else
-					m_valid = true;
-			}
+			{m_valid = this->get_next().find("0.6"); /*goto version*/}
 
 			std::string get_next() noexcept
 			{
