@@ -53,6 +53,8 @@ namespace twl
 		{
 			dsi_helper dsi{entry.data()}; // parser
 			info.version = dsi.get_next();
+			if(!mlk::stl_string::contains("0.6", info.version))
+				return false;
 			info.name = dsi.get_next();
 			info.map_name = dsi.get_next();
 			info.game_type = dsi.get_next();
