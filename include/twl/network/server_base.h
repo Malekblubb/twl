@@ -19,6 +19,8 @@ namespace twl
 	{
 		class server_base
 		{
+			static constexpr mlk::llong m_min_recv_time{1}, m_max_recv_time{300};
+
 			basic_connection m_connection;
 			mlk::slot<const mlk::data_packet&, const mlk::ntw::ip_address&> m_on_recv;
 
@@ -45,13 +47,18 @@ namespace twl
 
 			void refresh()
 			{
+				auto count(0);
 				for(auto& a : m_servers)
 				{
+					if(count >= 200)
+						m_connection.recv<m_min_recv_time>();
+
 					m_connection.send(a.address());
 					a.on_send();
-				}
 
-				m_connection.start_recv();
+					++count;
+				}
+				m_connection.recv<m_max_recv_time>();
 			}
 
 		private:

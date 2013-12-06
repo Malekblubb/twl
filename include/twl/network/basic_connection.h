@@ -21,10 +21,16 @@ namespace twl
 {
 	namespace internal
 	{
+		static mlk::ntw::sock<mlk::ntw::sock_type::udp, false>& global_socket()
+		{
+			static mlk::ntw::sock<mlk::ntw::sock_type::udp, false> sock;
+			return sock;
+		}
+
 		class basic_connection
 		{
 			static constexpr std::size_t m_max_recv_len{2048};
-			mlk::ntw::sock<mlk::ntw::sock_type::udp, false> m_socket;
+			mlk::ntw::sock<mlk::ntw::sock_type::udp, false> m_socket{global_socket()};
 			mlk::ntw::packet m_req_packet;
 			mlk::ntw::ip_address m_from;
 			mlk::hrs_time_pnt m_recv_start;
@@ -51,15 +57,15 @@ namespace twl
 				return true;
 			}
 
-			void start_recv()
+			template<mlk::llong timeout>
+			void recv()
 			{
 				mlk::data_packet tmp_data;
-
 				for(;;)
 				{
 					m_recv_start = mlk::tm::time_pnt();
 
-					while(!timed_out())
+					while(!timed_out(timeout))
 					{
 						m_from.reset();
 						m_socket.recv(m_from, tmp_data, m_max_recv_len);
@@ -67,13 +73,13 @@ namespace twl
 							mlk::emit_signal(m_received, tmp_data, m_from);
 						mlk::tm::sleep(1); // dont spam the cpu
 					}
-					if(this->timed_out())
+					if(this->timed_out(timeout))
 						break;
 				}
 			}
 
 		private:
-			bool timed_out() {return mlk::tm::timed_out(m_recv_start, 999);}
+			bool timed_out(mlk::ullong timeout) {return mlk::tm::timed_out(m_recv_start, timeout);}
 		};
 	}
 }

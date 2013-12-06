@@ -30,6 +30,9 @@ namespace twl
 
 		~multi_server() = default;
 
+		void add(const ip_list& list)
+		{m_servers.insert(m_servers.end(), list.begin(), list.end());}
+
 		const info_vec& get_info() noexcept
 		{
 			this->refresh();
