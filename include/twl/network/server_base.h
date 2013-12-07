@@ -41,6 +41,10 @@ namespace twl
 			void add(const mlk::ntw::ip_address& address)
 			{m_servers.push_back({address});}
 
+			auto num_servers() const noexcept
+			-> decltype(m_servers.size())
+			{return m_servers.size();}
+
 		protected:
 			void set_connection_packet(const mlk::ntw::packet& packet)
 			{m_connection.set_packet(packet);}
