@@ -35,11 +35,14 @@ namespace twl
 
 		const info_vec& get_info() noexcept
 		{
-			this->refresh();
+			this->update();
 			return m_infos;
 		}
 
 	private:
+		void update() noexcept
+		{m_infos.clear(); this->refresh();}
+
 		void make_entry(const internal::basic_server_entry& entry) override
 		{m_infos.push_back(internal::make_info(entry));}
 	};
