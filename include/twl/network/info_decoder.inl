@@ -18,7 +18,7 @@ namespace twl
 	{
 		class dsi_helper
 		{
-			mlk::data_packet m_data;
+			const mlk::data_packet& m_data;
 			std::size_t m_current{0};
 
 		public:
