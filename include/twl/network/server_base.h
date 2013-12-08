@@ -39,7 +39,7 @@ namespace twl
 			virtual ~server_base() = default;
 
 			void add(const mlk::ntw::ip_address& address)
-			{m_servers.push_back({address});}
+			{this->add_impl(address);}
 
 			auto num_servers() const noexcept
 			-> decltype(m_servers.size())
@@ -65,7 +65,21 @@ namespace twl
 				m_connection.recv<m_max_recv_time>();
 			}
 
+			bool server_exists(const mlk::ntw::ip_address& address) const noexcept
+			{
+				return mlk::cnt::find_in_if(
+				[&](const internal::basic_server_entry& e)
+				{return e.address() == address;}, m_servers) != m_servers.end();
+			}
+
 		private:
+			void add_impl(const mlk::ntw::ip_address& address) noexcept
+			{
+				if(this->server_exists(address))
+					return;
+				m_servers.push_back({address});
+			}
+
 			void on_received(const mlk::data_packet& data, const mlk::ntw::ip_address& address)
 			{
 				// find the server in the list
