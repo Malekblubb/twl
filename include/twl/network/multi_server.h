@@ -31,7 +31,7 @@ namespace twl
 		~multi_server() = default;
 
 		void add_list(const ip_list& list)
-		{m_servers.insert(m_servers.end(), list.begin(), list.end());}
+		{this->add_list_impl(list);}
 
 		const info_vec& get_info() noexcept
 		{
@@ -40,6 +40,22 @@ namespace twl
 		}
 
 	private:
+		void add_list_impl(const ip_list& list)
+		{
+			ip_list cpy{list};
+
+			// remove double entrys in list
+			mlk::cnt::remove_multiple_but_one(cpy);
+
+			// remove servers that already exist
+			cpy.erase(std::remove_if(cpy.begin(), cpy.end(),
+			[&](const mlk::ntw::ip_address& address)
+			{return this->server_exists(address);}), cpy.end());
+
+			// add edited list
+			m_servers.insert(m_servers.end(), cpy.begin(), cpy.end());
+		}
+
 		void update() noexcept
 		{m_infos.clear(); this->refresh();}
 
