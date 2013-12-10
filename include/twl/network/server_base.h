@@ -38,6 +38,9 @@ namespace twl
 
 			virtual ~server_base() = default;
 
+			void clear() noexcept
+			{m_servers.clear();}
+
 			bool add(const mlk::ntw::ip_address& address)
 			{return this->add_impl(address);}
 
@@ -73,7 +76,7 @@ namespace twl
 			}
 
 		private:
-			bool  add_impl(const mlk::ntw::ip_address& address) noexcept
+			bool add_impl(const mlk::ntw::ip_address& address) noexcept
 			{
 				if(this->server_exists(address))
 					return false;
