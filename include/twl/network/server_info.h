@@ -16,6 +16,8 @@
 
 namespace twl
 {
+	using server_infos = std::vector<server_info>;
+
 	struct server_info
 	{
 		std::string name;
