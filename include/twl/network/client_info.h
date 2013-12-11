@@ -8,6 +8,7 @@
 
 
 #include <string>
+#include <vector>
 
 
 namespace twl
@@ -20,6 +21,8 @@ namespace twl
 		int score;
 		int is_player;
 	};
+
+	using client_infos = std::vector<client_info>;
 }
 
 

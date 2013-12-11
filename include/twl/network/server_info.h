@@ -16,8 +16,6 @@
 
 namespace twl
 {
-	using server_infos = std::vector<server_info>;
-
 	struct server_info
 	{
 		std::string name;
@@ -35,6 +33,8 @@ namespace twl
 		bool is_valid() const noexcept
 		{return !m_empty;}
 	};
+
+	using server_infos = std::vector<server_info>;
 
 	namespace internal
 	{
