@@ -23,7 +23,7 @@ namespace twl
 
 	public:
 		server(const mlk::ntw::ip_address& address) :
-			internal::server_base{mlk::ntw::packet{internal::server_req<internal::req_type::info>{}.request_data()}.add({m_token})}
+			internal::server_base{mlk::ntw::packet{internal::server_req<internal::req_type::info>{}.request_data()}.append(mlk::data_packet{m_token})}
 		{this->set_address(address);}
 
 		void add(const mlk::ntw::ip_address &address) = delete;

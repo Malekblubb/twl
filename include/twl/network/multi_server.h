@@ -25,7 +25,7 @@ namespace twl
 
 	public:
 		multi_server() :
-			internal::server_base{mlk::ntw::packet{internal::server_req<internal::req_type::info>{}.request_data()}.add({m_token})}
+			internal::server_base{mlk::ntw::packet{internal::server_req<internal::req_type::info>{}.request_data()}.append(mlk::data_packet{m_token})}
 		{ }
 
 		~multi_server() = default;
