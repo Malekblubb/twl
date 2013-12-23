@@ -20,12 +20,12 @@ namespace twl
 	{
 		using info_vec = std::vector<server_info>;
 
-		unsigned char m_token{mlk::rnd<unsigned char>(0, 9)}; // get random token
 		info_vec m_infos;
 
 	public:
 		multi_server() :
-			internal::server_base{mlk::ntw::packet{internal::server_req<internal::req_type::info>{}.request_data()}.append(mlk::data_packet{m_token})}
+			internal::server_base{mlk::ntw::packet{
+								  internal::server_req<internal::req_type::info>{}.request_data()}.append(mlk::data_packet{mlk::rnd<unsigned char>(0, 9)})}
 		{ }
 
 		~multi_server() = default;

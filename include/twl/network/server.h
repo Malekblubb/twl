@@ -18,12 +18,12 @@ namespace twl
 {
 	class server : public internal::server_base
 	{
-		unsigned char m_token{mlk::rnd<unsigned char>(0, 9)}; // get random token
 		server_info m_info;
 
 	public:
 		server(const mlk::ntw::ip_address& address) :
-			internal::server_base{mlk::ntw::packet{internal::server_req<internal::req_type::info>{}.request_data()}.append(mlk::data_packet{m_token})}
+			internal::server_base{mlk::ntw::packet{
+								  internal::server_req<internal::req_type::info>{}.request_data()}.append(mlk::data_packet{mlk::rnd<unsigned char>(0, 9)})}
 		{this->set_address(address);}
 
 		void add(const mlk::ntw::ip_address &address) = delete;
