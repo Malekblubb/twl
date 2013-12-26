@@ -31,8 +31,8 @@ namespace twl
 
 			for(int i{14}; i < data.size() - 18; i += 18)
 			{
-				cmp = mlk::cnt::cut_vec(i, i + 12, data); // TODO: 'much' processing, maybe do this better
-				auto ip_str(from_binary_ip((cmp == ip4_spacer), mlk::cnt::cut_vec(i + 12, i + 18 + 12, data)));
+				cmp = mlk::data_packet{data.begin() + i, data.begin() + i + 12}; // TODO: 'much' processing, maybe do this better
+				auto ip_str(from_binary_ip((cmp == ip4_spacer), mlk::data_packet{data.begin() + i + 12, data.begin() + i + 18 + 12}));
 				list.push_back({ip_str, static_cast<int>(data[i + 16] * 0xff + data[i + 16] + data[i + 17])});
 			}
 			return true;

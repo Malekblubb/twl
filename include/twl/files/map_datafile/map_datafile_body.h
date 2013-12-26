@@ -78,7 +78,7 @@ namespace twl
 				int loops{this->iteminfo_area_size()};
 
 				m_iteminfo_area.on_process_data(
-							[&](std::vector<map_datafile_iteminfo>& items) -> void
+							[&](std::vector<map_datafile_iteminfo>& items)
 				{
 					std::vector<map_datafile_iteminfo> result;
 					for(int i{0}; i < loops; i += sizeof(map_datafile_iteminfo))
@@ -92,7 +92,7 @@ namespace twl
 				loops += this->itemoffset_area_size();
 
 				m_item_offset_area.on_process_data(
-							[&](std::vector<int>& items) -> void
+				[&](std::vector<int>& items)
 				{
 					std::vector<int> result;
 					for(int i{this->iteminfo_area_size()}; i < loops; i += sizeof(int))
@@ -104,7 +104,7 @@ namespace twl
 				loops += this->dataoffset_area_size();
 
 				m_data_offset_area.on_process_data(
-							[&](std::vector<int>& items) -> void
+				[&](std::vector<int>& items)
 				{
 					std::vector<int> result;
 					for(int i{this->iteminfo_area_size() + this->itemoffset_area_size()}; i < loops; i += sizeof(int))
@@ -116,7 +116,7 @@ namespace twl
 				loops += this->ucmpdata_area_size();
 
 				m_ucmp_datasize_area.on_process_data(
-							[&](std::vector<int>& items) -> void
+				[&](std::vector<int>& items)
 				{
 					std::vector<int> result;
 					for(int i{this->dataoffset_area_size() + this->iteminfo_area_size() + this->itemoffset_area_size()}; i < loops; i += sizeof(int))
@@ -128,14 +128,16 @@ namespace twl
 				loops += this->items_area_size();
 
 				m_item_area.on_process_data(
-							[&](std::vector<map_datafile_item>& items) -> void
+				[&](std::vector<map_datafile_item>& items)
 				{
 					std::vector<map_datafile_item> result;
 					int i{this->ucmpdata_area_size() + this->dataoffset_area_size() + this->iteminfo_area_size() + this->itemoffset_area_size()};
 					for(; i < loops;)
 					{
 						int itemsize{ mlk::cnt::make_int(i+4, m_data)};
-						result.push_back(map_datafile_item{mlk::cnt::make_int(i, m_data), itemsize, mlk::cnt::cut_vec(i+8, i+8+itemsize, m_data)});
+						result.push_back(map_datafile_item{mlk::cnt::make_int(i, m_data),
+														   itemsize,
+														   mlk::cnt::cut_vec<std::vector<unsigned char>>(m_data.begin() + i + 8, m_data.begin() + i + 8 + itemsize)});
 						i += (2 * sizeof(int)) + itemsize;
 					}
 
@@ -145,7 +147,7 @@ namespace twl
 				loops += this->data_area_size();
 
 				m_data_area.on_process_data(
-							[&](std::vector<mlk::data_packet>& items) -> void
+				[&](std::vector<mlk::data_packet>& items)
 				{
 					std::vector<mlk::data_packet> result;
 					std::vector<int> data_lengths{calc_data_length(m_data_offset_area.item_data(), this->data_area_size())};
@@ -153,7 +155,7 @@ namespace twl
 
 					for(int data_lengths_index{0}; i < loops; ++data_lengths_index)
 					{
-						result.push_back(mlk::cnt::cut_vec(i, i+data_lengths[data_lengths_index], m_data)); // TODO: this item is one byte larger because of cut_vec
+						result.push_back(mlk::cnt::cut_vec<std::vector<unsigned char>>(m_data.begin() + i, m_data.begin() + i + data_lengths[data_lengths_index]));
 						i += data_lengths[data_lengths_index];
 					}
 
