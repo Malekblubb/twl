@@ -29,7 +29,7 @@ namespace twl
 			mlk::data_packet ip4_spacer{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff};
 			mlk::data_packet cmp;
 
-			for(int i{14}; i < data.size() - 18; i += 18)
+			for(std::size_t i{14}; i < data.size() - 18; i += 18)
 			{
 				cmp = mlk::data_packet{data.begin() + i, data.begin() + i + 12}; // TODO: 'much' processing, maybe do this better
 				auto ip_str(from_binary_ip((cmp == ip4_spacer), mlk::data_packet{data.begin() + i + 12, data.begin() + i + 18 + 12}));
