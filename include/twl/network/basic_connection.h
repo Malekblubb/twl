@@ -1,5 +1,5 @@
 ﻿//
-// Copyright (c) 2013 Christoph Malek
+// Copyright (c) 2013-2014 Christoph Malek
 // See LICENSE for more information.
 //
 
