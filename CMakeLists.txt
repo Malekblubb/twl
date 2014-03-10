@@ -3,13 +3,12 @@ project(twlib)
 cmake_minimum_required(VERSION 2.8)
 
 
-set(CMAKE_CXX_FLAGS "-std=c++0x")
+set(CMAKE_CXX_FLAGS "-std=c++1y")
 set(SRC "src")
 set(HDR "include")
 set(EXT_MLK "external/mlk/include")
-set(EXT_TW "external/teeworlds/src")
 set(LIST "")
-include_directories(${HDR} ${EXT_MLK} ${EXT_TW})
+include_directories(${HDR} ${EXT_MLK})
 
 
 file(GLOB_RECURSE LIST "${HDR}/*.*")
