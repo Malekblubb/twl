@@ -9,6 +9,8 @@
 
 #include "player_info.hpp"
 
+#include <mlk/network/network_utl.h>
+
 #include <string>
 #include <vector>
 
@@ -22,13 +24,17 @@ namespace twl
 	{
 		friend class internal::info_parser;
 
+		mlk::ntw::ip_address m_address;
 		std::string m_version, m_name, m_mapname, m_gametype;
 		int m_flags{0}, m_numplayers{0}, m_maxplayers{0}, m_numclients{0}, m_maxclients{0};
 		float m_latency{0.f};
 		std::vector<player_info> m_players;
 
-		server_info(const std::string& version, const std::string& name, const std::string& mapname, const std::string& gametype,
-					int flags, int numplayers, int maxplayers, int numclients, int maxclients, float latency) :
+		server_info(const mlk::ntw::ip_address& addr,
+					const std::string& version, const std::string& name, const std::string& mapname, const std::string& gametype,
+					int flags, int numplayers, int maxplayers, int numclients, int maxclients,
+					float latency) :
+			m_address{addr},
 			m_version{version}, m_name{name}, m_mapname{mapname}, m_gametype{gametype},
 			m_flags{flags}, m_numplayers{numplayers}, m_maxplayers{maxplayers}, m_numclients{numclients}, m_maxclients{maxclients},
 			m_latency{latency}
@@ -39,6 +45,9 @@ namespace twl
 
 	public:
 		server_info() = default;
+
+		const mlk::ntw::ip_address& address() const noexcept
+		{return m_address;}
 
 		const std::string& version() const noexcept
 		{return m_version;}
