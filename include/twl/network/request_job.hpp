@@ -7,6 +7,8 @@
 #define TWL_NETWORK_REQUEST_JOB_HPP
 
 
+#include "requests.hpp"
+
 #include <mlk/network/address.h>
 #include <mlk/time/time_utl.h>
 #include <mlk/types/types.h>
@@ -21,12 +23,46 @@ namespace twl
 			mlk::ntw::ip_address m_address;
 			mlk::hrs_time_pnt m_send_tp;
 			mlk::hrs_time_pnt m_recv_tp;
+			std::size_t m_timeout;
+			mlk::ushort m_max_resend, m_current_resend{0};
+			server_request m_request;
+
+			bool m_need_resend{true}, m_need_delete{false}, m_sent{false};
 
 		public:
-			request_job(const mlk::ntw::ip_address& addr, const mlk::hrs_time_pnt& send_tp) :
+			request_job() = default;
+
+			request_job(const mlk::ntw::ip_address& addr, std::size_t timeout, mlk::ushort max_resend, server_request req) :
 				m_address{addr},
-				m_send_tp{send_tp}
+				m_timeout{timeout},
+				m_max_resend{max_resend},
+				m_request{req}
 			{ }
+
+			void update()
+			{
+				if(m_need_delete)
+					return;
+
+				if(m_sent && mlk::tm::timed_out(m_send_tp, m_timeout))
+				{
+					m_need_resend = true;
+					++m_current_resend;
+					if(m_current_resend >= m_max_resend)
+						m_need_delete = true;
+				}
+			}
+
+			void on_resend() noexcept
+			{
+				m_send_tp = mlk::tm::time_pnt();
+				m_need_resend = false;
+				m_sent = true;
+			}
+
+			void on_recv() noexcept
+			{m_recv_tp = mlk::tm::time_pnt();}
+
 
 			const auto& addr() const noexcept
 			{return m_address;}
@@ -34,8 +70,14 @@ namespace twl
 			auto latency() const noexcept
 			{return mlk::tm::duration_as<float>(m_send_tp, m_recv_tp);}
 
-			void on_recv() noexcept
-			{m_recv_tp = mlk::tm::time_pnt();}
+			bool need_resend() const noexcept
+			{return m_need_resend;}
+
+			bool need_delete() const noexcept
+			{return m_need_delete;}
+
+			auto request_type() const noexcept
+			{return m_request;}
 		};
 	}
 }
