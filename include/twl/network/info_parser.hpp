@@ -20,6 +20,7 @@ namespace twl
 		class info_parser
 		{
 			const mlk::data_packet& m_data;
+			mlk::ntw::ip_address m_from;
 			float m_latency;
 			std::string m_workstr;
 
@@ -28,8 +29,9 @@ namespace twl
 			bool m_valid{false};
 
 		public:
-			info_parser(const mlk::data_packet& data, float latency) :
+			info_parser(const mlk::data_packet& data, const mlk::ntw::ip_address& from, float latency) :
 				m_data{data},
+				m_from{from},
 				m_latency{latency}
 			{this->parse();}
 
@@ -49,6 +51,7 @@ namespace twl
 
 				m_result =
 				{
+					m_from,
 					this->get_next<std::string>(), this->get_next<std::string>(), this->get_next<std::string>(), this->get_next<std::string>(),
 					this->get_next<int>(), this->get_next<int>(), this->get_next<int>(), this->get_next<int>(), this->get_next<int>(),
 					m_latency
