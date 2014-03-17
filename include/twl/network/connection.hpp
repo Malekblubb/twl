@@ -41,47 +41,15 @@ namespace twl
 			void send(const mlk::ntw::ip_address& addr)
 			{m_connection.send(request<req>{}(), addr);}
 
-			void recv_threaded()
+			void send(const mlk::ntw::ip_address &addr, const mlk::data_packet& data)
+			{m_connection.send(data, addr);}
+
+			void recv()
 			{
-				if(m_recving)
-					return;
-
-				this->recv_start();
-				m_recv_future = std::async(std::launch::async,
-				[this]
-				{
-					while(m_recving)
-					{
-						if(m_recv_timer.timed_out())
-						{
-							this->recv_end();
-							return;
-						}
-
-						mlk::ntw::ip_address from;
-						auto recved(m_connection.recv(from));
-						if(recved.empty())
-							continue;
-
-						this->on_recved(recved, from);
-						m_recv_timer.restart(); // restart timer
-					}
-				});
-			}
-
-			bool receiving() const noexcept
-			{return m_recving;}
-
-		private:
-			void recv_start()
-			{
-				m_recving = true;
-				m_recv_timer.run();
-			}
-
-			void recv_end()
-			{
-				m_recving = false;
+				mlk::ntw::ip_address from;
+				auto recved(m_connection.recv(from));
+				if(!recved.empty())
+					this->on_recved(recved, from);
 			}
 		};
 	}
