@@ -23,8 +23,18 @@ namespace twl
 	{
 		namespace ntw_constants
 		{			
-			inline constexpr long long default_timeout()
+			// timeout
+			inline constexpr mlk::llong default_timeout()
 			{return 999;}
+
+			// how often should we recheck the server if it is not responding
+			inline constexpr mlk::ushort resend_timeouts()
+			{return 0;}
+
+			// max concurrent requests at the same time
+			// (one request times out after 'default_timeout' * 'resend_timeouts')
+			inline constexpr std::size_t max_concurrent_requests()
+			{return 20;}
 
 			inline constexpr std::size_t max_datasize()
 			{return 2048;}
