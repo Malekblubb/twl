@@ -19,23 +19,28 @@ namespace twl
 	{
 		std::vector<server_info> m_infos;
 
-		mlk::ntw::ip_address m_address;
-		bool m_addr_set{false};
+		masterlist m_servers;
 
 	public:
 		game_server()
 		{this->init();}
 
-		game_server(const mlk::ntw::ip_address& addr) :
-			m_address{addr},
-			m_addr_set{true}
-		{this->init();}
+		void add_server(const mlk::ntw::ip_address& addr)
+		{
+			if(!mlk::cnt::exists(addr, m_servers))
+				m_servers.push_back(addr);
+		}
+
+		void add_masterlist(const masterlist& list)
+		{
+			m_servers += list;
+			mlk::cnt::remove_multiple_but_one(m_servers); // remove double entrys
+		}
 
 		void request_info()
 		{
-			if(!m_addr_set)
-				return;
-			this->request_info(m_address);
+			for(auto& a : m_servers)
+				this->request_info(a);
 		}
 
 		void request_info(const mlk::ntw::ip_address& addr)
@@ -54,7 +59,7 @@ namespace twl
 				if(latency == -1.f)
 					return;
 
-				internal::info_parser ip{data, latency};
+				internal::info_parser ip{data, addr, latency};
 				if(ip.valid())
 					m_infos.push_back(ip.get_result());
 			};
