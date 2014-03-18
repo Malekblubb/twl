@@ -7,6 +7,7 @@
 #define TWL_NETWORK_NETWORK_HPP
 
 
+#include "econ_client.hpp"
 #include "player_info.hpp"
 #include "server_game.hpp"
 #include "server_info.hpp"
