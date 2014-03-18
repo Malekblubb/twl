@@ -17,6 +17,7 @@ namespace twl
 {
 	// twl
 	using masterlist = std::vector<mlk::ntw::ip_address>;
+	using econ_command = std::string;
 
 	// internal
 	namespace internal
@@ -35,6 +36,9 @@ namespace twl
 			// (one request times out after 'default_timeout' * 'resend_timeouts')
 			inline constexpr std::size_t max_concurrent_requests()
 			{return 20;}
+
+			inline constexpr mlk::ullong econ_timeout()
+			{return 5000;}
 
 			inline constexpr std::size_t max_datasize()
 			{return 2048;}
