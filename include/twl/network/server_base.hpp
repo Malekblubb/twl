@@ -96,6 +96,13 @@ namespace twl
 							[&addr](const request_job& job){return (job.addr() == addr) && job.request_type() == req;}, m_jobs))
 					m_jobs.emplace_back(addr, timeout, internal::ntw_constants::resend_timeouts(), req);
 			}
+
+			void reset() noexcept
+			{
+				m_running = false;
+				m_jobs.clear();
+				m_running_jobs = 0;
+			}
 		};
 	}
 }

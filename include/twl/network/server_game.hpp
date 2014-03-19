@@ -52,6 +52,13 @@ namespace twl
 		void clear_requests() noexcept
 		{m_servers.clear();}
 
+		void reset() noexcept
+		{
+			server_base::reset();
+			m_infos.clear();
+			m_servers.clear();
+		}
+
 		const server_infos& get_infos() const noexcept
 		{return m_infos;}
 

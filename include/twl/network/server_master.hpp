@@ -50,6 +50,14 @@ namespace twl
 				this->request<internal::server_request::master_get_list>(a);
 		}
 
+		void reset() noexcept
+		{
+			server_base::reset();
+			m_servers.clear();
+			m_listresult.clear();
+			m_countresult = 0;
+		}
+
 		int get_count() const noexcept
 		{return m_countresult;}
 
