@@ -46,8 +46,11 @@ namespace twl
 				this->request<internal::server_request::game_get_info>(a);
 		}
 
-		void clear() noexcept
+		void clear_infos() noexcept
 		{m_infos.clear();}
+
+		void clear_requests() noexcept
+		{m_servers.clear();}
 
 		const server_infos& get_infos() const noexcept
 		{return m_infos;}
