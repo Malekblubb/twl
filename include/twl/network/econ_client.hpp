@@ -64,7 +64,7 @@ namespace twl
 			this->recv();
 
 			// process cmd queue
-			for(auto i(0); i < m_cmd_queue.size(); ++i)
+			for(std::size_t i{0}; i < m_cmd_queue.size(); ++i)
 			{
 				if(this->send_command_impl(m_cmd_queue.front()))
 					m_cmd_queue.pop_front();
