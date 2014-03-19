@@ -8,6 +8,7 @@
 
 
 #include <string>
+#include <vector>
 
 
 namespace twl
@@ -47,6 +48,8 @@ namespace twl
 		bool is_player() const noexcept
 		{return m_isplayer;}
 	};
+
+	using player_infos = std::vector<player_info>;
 }
 
 
