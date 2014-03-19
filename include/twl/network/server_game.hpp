@@ -41,12 +41,10 @@ namespace twl
 
 		void request_info()
 		{
+			m_infos.clear();
 			for(auto& a : m_servers)
-				this->request_info(a);
+				this->request<internal::server_request::game_get_info>(a);
 		}
-
-		void request_info(const mlk::ntw::ip_address& addr)
-		{this->request<internal::server_request::game_get_info>(addr);}
 
 		const server_infos& get_infos() const noexcept
 		{return m_infos;}
