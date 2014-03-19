@@ -30,7 +30,7 @@ namespace twl
 				m_socket.send(addr, internal::add_token(m_token, connless));
 			}
 
-			auto recv(mlk::ntw::ip_address& from)
+			mlk::data_packet recv(mlk::ntw::ip_address& from)
 			{
 				mlk::data_packet data;
 				m_socket.recv(from, data, internal::ntw_constants::max_datasize());

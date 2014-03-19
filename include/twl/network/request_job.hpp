@@ -64,10 +64,10 @@ namespace twl
 			{m_recv_tp = mlk::tm::time_pnt();}
 
 
-			const auto& addr() const noexcept
+			const mlk::ntw::ip_address& addr() const noexcept
 			{return m_address;}
 
-			auto latency() const noexcept
+			float latency() const noexcept
 			{return mlk::tm::duration_as<float>(m_send_tp, m_recv_tp);}
 
 			bool need_resend() const noexcept
@@ -76,7 +76,7 @@ namespace twl
 			bool need_delete() const noexcept
 			{return m_need_delete;}
 
-			auto request_type() const noexcept
+			server_request request_type() const noexcept
 			{return m_request;}
 		};
 	}

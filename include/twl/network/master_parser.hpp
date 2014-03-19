@@ -47,7 +47,7 @@ namespace twl
 			int get_countresult() const noexcept
 			{return m_countresult;}
 
-			const auto& get_listresult() const noexcept
+			const masterlist& get_listresult() const noexcept
 			{return m_listresult;}
 
 		private:

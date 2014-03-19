@@ -53,14 +53,14 @@ namespace twl
 		int get_count() const noexcept
 		{return m_countresult;}
 
-		const auto& get_list() const noexcept
+		const masterlist& get_list() const noexcept
 		{return m_listresult;}
 
 	private:
 		void init()
 		{
 			this->on_recved =
-			[this](const auto& data, const auto&)
+			[this](const mlk::data_packet& data, const mlk::ntw::ip_address&)
 			{
 				internal::master_parser mp{data};
 				if(mp.countreply())

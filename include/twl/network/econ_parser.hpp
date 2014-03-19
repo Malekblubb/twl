@@ -36,7 +36,7 @@ namespace twl
 			bool status_reply() const noexcept
 			{return m_status_reply;}
 
-			const auto& get_status_reply() const noexcept
+			const econ_player_infos& get_status_reply() const noexcept
 			{return m_status_result;}
 
 		private:

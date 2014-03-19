@@ -58,7 +58,7 @@ namespace twl
 				}
 
 				// remove jobs that are timed out
-				mlk::cnt::remove_all_if([](const auto& job){return job.need_delete();}, m_jobs);
+				mlk::cnt::remove_all_if([](const request_job& job){return job.need_delete();}, m_jobs);
 
 				if(m_running && m_jobs.empty())
 				{
@@ -73,9 +73,9 @@ namespace twl
 		protected:
 			mlk::slot<const mlk::data_packet&, const mlk::ntw::ip_address&>& on_recved{m_connection.on_recved};
 
-			auto on_job_recv(const mlk::ntw::ip_address& addr)
+			float on_job_recv(const mlk::ntw::ip_address& addr)
 			{
-				auto job(mlk::cnt::find_in_if([&addr](const auto& job){return job.addr() == addr;}, m_jobs));
+				auto job(mlk::cnt::find_in_if([&addr](const request_job& job){return job.addr() == addr;}, m_jobs));
 				if(job == std::end(m_jobs))
 					return -1.f;
 				job->on_recv();
@@ -93,7 +93,7 @@ namespace twl
 				m_running = true;
 
 				if(!mlk::cnt::exists_if(
-							[&addr](const auto& job){return (job.addr() == addr) && job.request_type() == req;}, m_jobs))
+							[&addr](const request_job& job){return (job.addr() == addr) && job.request_type() == req;}, m_jobs))
 					m_jobs.emplace_back(addr, timeout, internal::ntw_constants::resend_timeouts(), req);
 			}
 		};

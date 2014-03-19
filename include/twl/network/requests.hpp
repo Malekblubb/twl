@@ -81,17 +81,17 @@ namespace twl
 				m_requests.emplace(server_request::master_get_count, request<server_request::master_get_count>{});
 			}
 
-			static auto& instance() noexcept
+			static runtime_request& instance() noexcept
 			{
 				static runtime_request rr;
 				return rr;
 			}
 
-			auto& get_request(server_request req) noexcept
+			request_base& get_request(server_request req) noexcept
 			{return m_requests[req];}
 		};
 
-		inline auto& get_request(server_request req)
+		inline request_base& get_request(server_request req)
 		{return runtime_request::instance().get_request(req);}
 	}
 }

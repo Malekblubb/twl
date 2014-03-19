@@ -46,14 +46,14 @@ namespace twl
 		void request_info(const mlk::ntw::ip_address& addr)
 		{this->request<internal::server_request::game_get_info>(addr);}
 
-		const auto& get_infos() const noexcept
+		const server_infos& get_infos() const noexcept
 		{return m_infos;}
 
 	private:
 		void init()
 		{
 			this->on_recved =
-			[this](const auto& data, const auto& addr)
+			[this](const mlk::data_packet& data, const mlk::ntw::ip_address& addr)
 			{
 				auto latency(this->on_job_recv(addr));
 				if(latency == -1.f)
