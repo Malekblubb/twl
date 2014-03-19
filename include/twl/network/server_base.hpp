@@ -23,7 +23,7 @@ namespace twl
 		template<typename Connection_Type, std::size_t timeout>
 		class server_base
 		{
-			internal::connection<Connection_Type, timeout> m_connection;
+			internal::connection<Connection_Type> m_connection;
 
 			std::vector<internal::request_job> m_jobs;
 			std::size_t m_running_jobs{0};

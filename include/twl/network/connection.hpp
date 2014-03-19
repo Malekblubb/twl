@@ -18,7 +18,7 @@ namespace twl
 {
 	namespace internal
 	{
-		template<typename Connection_Type, std::size_t recv_timeout>
+		template<typename Connection_Type>
 		class connection
 		{
 			Connection_Type m_connection;
