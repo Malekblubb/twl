@@ -22,6 +22,8 @@ namespace twl
 		masterlist m_servers;
 
 	public:
+		mlk::slot<const server_info&> on_info;
+
 		game_server()
 		{this->init();}
 
@@ -61,7 +63,11 @@ namespace twl
 
 				internal::info_parser ip{data, addr, latency};
 				if(ip.valid())
-					m_infos.push_back(ip.get_result());
+				{
+					auto res(ip.get_result());
+					m_infos.push_back(res);
+					this->on_info(res);
+				}
 			};
 		}
 	};
