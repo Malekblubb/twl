@@ -13,8 +13,6 @@
 #include <mlk/signals_slots/slot.h>
 #include <mlk/time/simple_timer.h>
 
-#include <future>
-
 
 namespace twl
 {
@@ -24,8 +22,6 @@ namespace twl
 		class connection
 		{
 			Connection_Type m_connection;
-			mlk::tm::simple_timer m_recv_timer{recv_timeout};
-			std::future<void> m_recv_future;
 
 			bool m_recving{false};
 
