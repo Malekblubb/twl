@@ -28,7 +28,7 @@ namespace twl
 		std::string m_version, m_name, m_mapname, m_gametype;
 		int m_flags{0}, m_numplayers{0}, m_maxplayers{0}, m_numclients{0}, m_maxclients{0};
 		float m_latency{0.f};
-		std::vector<player_info> m_players;
+		player_infos m_players;
 
 		server_info(const mlk::ntw::ip_address& addr,
 					const std::string& version, const std::string& name, const std::string& mapname, const std::string& gametype,
@@ -76,12 +76,14 @@ namespace twl
 		int maxclients() const noexcept
 		{return m_maxclients;}
 
-		const auto& players() const noexcept
+		const player_infos& players() const noexcept
 		{return m_players;}
 
 		float ping() const noexcept
 		{return m_latency;}
 	};
+
+	using server_infos = std::vector<server_info>;
 }
 
 
