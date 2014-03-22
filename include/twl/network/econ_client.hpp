@@ -94,7 +94,6 @@ namespace twl
 			}
 		}
 
-
 		void connect(const mlk::ntw::ip_address& addr) noexcept
 		{
 			m_next_addr = addr;
@@ -147,8 +146,11 @@ namespace twl
 			// connection lost
 			if(ret == 0)
 			{
-				this->reset();
-				this->on_connection_lost();
+				if(!m_need_connect)
+				{
+					this->reset();
+					this->on_connection_lost();
+				}
 			}
 
 			// recved data, still connected
