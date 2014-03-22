@@ -147,9 +147,6 @@ namespace twl
 			// connection lost
 			if(ret == 0)
 			{
-				m_connected = false;
-				m_logged = false;
-				m_need_send_pass = false;
 				this->reset();
 				this->on_connection_lost();
 			}
