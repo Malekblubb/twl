@@ -76,13 +76,14 @@ namespace twl
 			if(m_need_connect)
 			{
 				// try connect
-				this->connect_impl();
-
-				if(m_timeouttimer.timed_out())
-				{
-					this->reset();
-					this->on_connection_timeout();
-				}
+				if(this->connect_impl())
+					this->on_connection();
+				else
+					if(m_timeouttimer.timed_out())
+					{
+						this->reset();
+						this->on_connection_timeout();
+					}
 			}
 
 			// send pass if needed
