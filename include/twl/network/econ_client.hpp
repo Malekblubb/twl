@@ -120,6 +120,9 @@ namespace twl
 		bool logged_in() const noexcept
 		{return m_logged;}
 
+		const mlk::ntw::ip_address& address() const noexcept
+		{return m_telnet.address();}
+
 		std::string log() const
 		{return m_logstream.str();}
 
