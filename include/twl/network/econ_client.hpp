@@ -161,6 +161,7 @@ namespace twl
 				{
 					m_need_send_pass = false;
 					m_logged = true;
+					this->on_login();
 				}
 				else if(parser.status_reply())
 					this->on_playerinfo(parser.get_status_reply());
