@@ -35,7 +35,7 @@ namespace twl
 		mlk::tm::simple_timer m_timeouttimer{internal::ntw_constants::econ_timeout()};
 
 		// log
-		std::ostringstream m_logstream;
+		std::string m_logstr;
 
 		bool m_running{false}, m_new_connection{true};
 		bool m_connected{false}, m_logged{false};
@@ -123,8 +123,8 @@ namespace twl
 		const mlk::ntw::ip_address& address() const noexcept
 		{return m_telnet.address();}
 
-		std::string log() const
-		{return m_logstream.str();}
+		const std::string& log() const
+		{return m_logstr;}
 
 	private:
 		void reset()
@@ -199,7 +199,7 @@ namespace twl
 			// delete the telnet characters at the back
 			std::string str{std::begin(m_recv_data), std::end(m_recv_data)};
 			mlk::stl_string::erase_all(0x00, str);
-			m_logstream << str;
+			m_logstr += str;
 			this->on_log_added(str);
 		}
 	};
