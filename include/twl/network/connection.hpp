@@ -23,8 +23,6 @@ namespace twl
 		{
 			Connection_Type m_connection;
 
-			bool m_recving{false};
-
 		public:
 			mlk::slot<const mlk::data_packet&, const mlk::ntw::ip_address&> on_recved;
 
