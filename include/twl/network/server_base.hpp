@@ -67,9 +67,6 @@ namespace twl
 				}
 			}
 
-			bool finished() const noexcept
-			{return !m_connection.receiving();}
-
 		protected:
 			mlk::slot<const mlk::data_packet&, const mlk::ntw::ip_address&>& on_recved{m_connection.on_recved};
 
