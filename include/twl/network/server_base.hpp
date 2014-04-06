@@ -31,6 +31,10 @@ namespace twl
 			bool m_running{false};
 
 		public:
+			server_base() :
+				on_recved(m_connection.on_recved)
+			{ }
+
 			mlk::slot<> on_finish;
 
 			void update()
@@ -68,7 +72,7 @@ namespace twl
 			}
 
 		protected:
-			mlk::slot<const mlk::data_packet&, const mlk::ntw::ip_address&>& on_recved{m_connection.on_recved};
+			mlk::slot<const mlk::data_packet&, const mlk::ntw::ip_address&>& on_recved/*{m_connection.on_recved} GCC pls impl. the standard*/;
 
 			float on_job_recv(const mlk::ntw::ip_address& addr)
 			{
