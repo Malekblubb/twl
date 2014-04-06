@@ -37,6 +37,9 @@ namespace twl
 		// log
 		std::string m_logstr;
 
+		// last playerinfos
+		econ_player_infos m_last_playerinfos;
+
 		bool m_running{false}, m_new_connection{true};
 		bool m_connected{false}, m_logged{false};
 		bool m_need_connect{false}, m_need_send_pass{false};
@@ -126,6 +129,9 @@ namespace twl
 		const std::string& log() const
 		{return m_logstr;}
 
+		const econ_player_infos& last_playerinfos() const noexcept
+		{return m_last_playerinfos;}
+
 	private:
 		void reset()
 		{
@@ -164,7 +170,10 @@ namespace twl
 					this->on_login();
 				}
 				else if(parser.status_reply())
-					this->on_playerinfo(parser.get_status_reply());
+				{
+					m_last_playerinfos = parser.get_status_reply();
+					this->on_playerinfo(m_last_playerinfos);
+				}
 
 				// add log
 				this->add_log();
