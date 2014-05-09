@@ -3,68 +3,117 @@
 // See LICENSE for more information.
 //
 
-#ifndef TWL_FILES_MAP_DATAFILE_H
-#define TWL_FILES_MAP_DATAFILE_H
+#ifndef TWL_FILES_MAP_MAP_DATAFILE_H
+#define TWL_FILES_MAP_MAP_DATAFILE_H
 
 
+#include "map_constants.hpp"
 #include "map_datafile_items.hpp"
 
-#include <mlk/filesystem/filesystem.h>
-#include <mlk/log/log.h>
+#include <mlk/types/types.h>
 
 
 namespace twl
 {
-	class map_datafile
+	namespace internal
 	{
-		mlk::fs::file_handle m_file{""};
-		mlk::data_packet m_raw;
-
-		bool m_gotpath{false};
-
-	public:
-		map_datafile() = default;
-
-		map_datafile(const std::string& path) :
-			m_file{path},
-			m_gotpath{true}
-		{ }
-
-		bool open()
+		class map_datafile
 		{
-			if(!m_gotpath)
+			// header
+			map_datafile_header m_header;
+
+			// items
+			std::vector<map_datafile_item> m_items;
+
+			// data
+			std::vector<mlk::data_packet> m_data;
+
+		public:
+			void init()
 			{
-				mlk::lerr()["twl::map_datafile"] << "got no path, can't open";
-				return false;
-			}
-			return this->parse();
-		}
 
-		bool open(const std::string& path)
-		{
-			m_gotpath = true;
-			m_file.reopen(path, std::ios::in);
-			return this->parse();
-		}
-
-	private:
-		bool parse()
-		{
-			if(!m_file.exists())
-			{
-				mlk::lerr()["twl::map_datafile"] << "given path does not exist, can't parse";
-				return false;
 			}
 
-			m_raw = m_file.read_all();
+			void add_item(const map_datafile_item& item)
+			{
+				m_items.emplace_back(item);
+			}
 
-			auto header(reinterpret_cast<internal::map_datafile_header*>(m_raw.data()));
-			std::cout << header->body_size() << std::endl;
+			template<map_constants::item_type type>
+			mlk::st num_items_of_type() const
+			{
+				mlk::st result{0};
+				for(const auto& a : m_items)
+					if(a.type == type)
+						++result;
+				return result;
+			}
 
-			return true;
+			template<map_constants::item_type type, typename Item_Type = typename map_constants::get_item_type<type>::type>
+			std::vector<const Item_Type*> items_of_type() const
+			{
+				std::vector<const Item_Type*> result;
+				for(const auto& a : m_items)
+					if(a.type == type)
+						result.push_back(reinterpret_cast<const Item_Type*>(a.data.data()));
+				return result;
+			}
+
+			template<map_constants::item_type type, typename Item_Type = typename map_constants::get_item_type<type>::type>
+			const Item_Type* item(int id) const
+			{
+				for(const auto& a : m_items)
+					if(a.type == type && a.id == id)
+						return reinterpret_cast<const Item_Type*>(a.data.data());
+				return nullptr;
+			}
+		};
+
+		// tiles
+		template<>
+		inline std::vector<const map_datafile_layer_tilemap*> map_datafile::items_of_type<map_constants::item_type::layer_tiles, map_datafile_layer_tilemap>() const
+		{
+			std::vector<const map_datafile_layer_tilemap*> result;
+			for(const auto& a : m_items)
+			{
+				if(a.type == map_constants::item_type::layer)
+				{
+					// cast the data
+					auto* ptr(reinterpret_cast<const map_datafile_layer*>(a.data.data()));
+					if(ptr == nullptr)
+						return result;
+
+					// is this the right layer type ?
+					if(ptr->type == map_constants::layer_type::tiles)
+						result.push_back(reinterpret_cast<const map_datafile_layer_tilemap*>(a.data.data()));
+				}
+			}
+			return result;
 		}
-	};
+
+		// quads
+		template<>
+		inline std::vector<const map_datafile_layer_quads*> map_datafile::items_of_type<map_constants::item_type::layer_quads, map_datafile_layer_quads>() const
+		{
+			std::vector<const map_datafile_layer_quads*> result;
+			for(const auto& a : m_items)
+			{
+				if(a.type == map_constants::item_type::layer)
+				{
+					// cast the data
+					auto* ptr(reinterpret_cast<const map_datafile_layer*>(a.data.data()));
+					if(ptr == nullptr)
+						return result;
+
+					// is this the right layer type ?
+					if(ptr->type == map_constants::layer_type::quads)
+						result.push_back(reinterpret_cast<const map_datafile_layer_quads*>(a.data.data()));
+				}
+			}
+			return result;
+		}
+	}
 }
 
 
-#endif // TWL_FILES_MAP_DATAFILE_H
+#endif //TWL_FILES_MAP_MAP_DATAFILE_H
