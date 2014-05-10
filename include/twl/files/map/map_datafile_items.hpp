@@ -55,11 +55,35 @@ namespace twl
 		};
 
 
-		//
+		// items
 
 		struct color
 		{
 			int r, g, b, a;
+		};
+
+		struct point
+		{
+			int x, y;
+		};
+
+		struct quad
+		{
+			point points[5];
+			color colors[4];
+			point texcoords[4];
+			int pos_env;
+			int pos_env_offset;
+			int color_env;
+			int color_env_offset;
+		};
+
+		struct tile
+		{
+			unsigned char index;
+			unsigned char flags;
+			unsigned char skip;
+			unsigned char reserved;
 		};
 
 		struct basic_map_datafile_item
