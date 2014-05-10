@@ -66,6 +66,9 @@ namespace twl
 				// start parse
 				m_parser.start_parse(&m_raw);
 
+				// free raw data
+				mlk::cnt::free_vec(m_raw);
+
 				return true;
 			}
 		};
