@@ -51,6 +51,9 @@ namespace twl
 				return this->parse();
 			}
 
+			const auto& parser() const noexcept
+			{return m_parser;}
+
 		private:
 			bool parse()
 			{
