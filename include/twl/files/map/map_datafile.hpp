@@ -25,19 +25,15 @@ namespace twl
 			// items
 			std::vector<map_datafile_item> m_items;
 
-			// data
-			std::vector<mlk::data_packet> m_data;
+			// uncompressed data
+			std::vector<mlk::data_packet> m_uncomressed_data;
 
 		public:
-			void init()
-			{
-
-			}
-
 			void add_item(const map_datafile_item& item)
-			{
-				m_items.emplace_back(item);
-			}
+			{m_items.emplace_back(item);}
+
+			void add_uncompressed_data(std::vector<mlk::data_packet>& data)
+			{m_uncomressed_data = std::move(data);}
 
 			template<map_constants::item_type type>
 			mlk::st num_items_of_type() const
@@ -67,6 +63,9 @@ namespace twl
 						return reinterpret_cast<const Item_Type*>(a.data.data());
 				return nullptr;
 			}
+
+			const auto& uncompressed_data() const noexcept
+			{return m_uncomressed_data;}
 		};
 
 		// tiles
