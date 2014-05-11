@@ -25,7 +25,6 @@ namespace twl
 		mlk::st m_width{0}, m_height{0};
 		mlk::gcs::color_rgb m_color;
 		const map_image* m_image{nullptr};
-
 		std::vector<internal::tile> m_tiles;
 		std::string m_name;
 
@@ -35,16 +34,16 @@ namespace twl
 			m_height{static_cast<mlk::st>(tlm->height)},
 			m_color{tlm->col},
 			m_image{tlm->image >= 0 ? &images.at(tlm->image) : nullptr},
-			m_tiles(m_width * m_height)
+			m_tiles(m_width * m_height),
+			m_name{map_constants::ints_to_str(tlm->name, 3)}
 		{
+			// add the tiles
 			mlk::data_packet tmp(sizeof(internal::tile));
 			for(auto i(0); i < uncomoressed_data[tlm->data].size(); i += sizeof(internal::tile))
 			{
 				tmp = {std::begin(uncomoressed_data[tlm->data]) + i, std::begin(uncomoressed_data[tlm->data]) + i + sizeof(internal::tile)};
 				m_tiles[i / sizeof(internal::tile)] = *reinterpret_cast<const internal::tile*>(tmp.data());
-				std::cout << (int)m_tiles[i / 4].index << std::endl;
 			}
-			std::cout <<  "\n";
 		}
 
 	public:
@@ -64,6 +63,9 @@ namespace twl
 
 		auto has_image() const noexcept
 		{return m_image != nullptr;}
+
+		const auto& name() const noexcept
+		{return m_name;}
 	};
 }
 
