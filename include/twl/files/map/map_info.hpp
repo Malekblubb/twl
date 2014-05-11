@@ -44,6 +44,15 @@ namespace twl
 
 		const auto& license() const noexcept
 		{return m_license;}
+
+	private:
+		void clear()
+		{
+			m_author.clear();
+			m_mapversion.clear();
+			m_credits.clear();
+			m_license.clear();
+		}
 	};
 }
 
