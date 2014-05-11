@@ -9,6 +9,8 @@
 
 #include "map_datafile_items.hpp"
 
+#include <string>
+
 
 namespace twl
 {
@@ -75,6 +77,34 @@ namespace twl
 		template<>
 		struct get_item_type<item_type::layer_quads>
 		{using type = internal::map_datafile_layer_quads;};
+
+
+		// utils
+		// forked from origin. teeworlds source
+		// (c) Magnus Auvinen
+		inline void IntsToStr(const int *pInts, int Num, char *pStr)
+		{
+			while(Num)
+			{
+				pStr[0] = (((*pInts)>>24)&0xff)-128;
+				pStr[1] = (((*pInts)>>16)&0xff)-128;
+				pStr[2] = (((*pInts)>>8)&0xff)-128;
+				pStr[3] = ((*pInts)&0xff)-128;
+				pStr += 4;
+				pInts++;
+				Num--;
+			}
+
+			// null terminate
+			pStr[-1] = 0;
+		}
+
+		inline std::string ints_to_str(const int* ints, int num)
+		{
+			char tmp[num * sizeof(int)];
+			IntsToStr(ints, num, tmp);
+			return tmp;
+		}
 	}
 }
 
