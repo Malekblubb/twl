@@ -85,6 +85,7 @@ namespace twl
 
 
 				// parse data, decompress it directly
+				auto failed(false);
 				std::vector<mlk::data_packet> uncompressed_data(header->num_rawdata);
 				for(auto i(0); i < header->num_rawdata; ++i)
 				{
@@ -103,9 +104,14 @@ namespace twl
 					cmprs.unpack(uncompressed_sizes[i]);
 					if(cmprs.is_valid())
 						uncompressed_data[i] = cmprs.get();
+					else
+						failed = true;
 
 					pos += header->data_area_size - data_offsets[i];
 				}
+
+				if(failed)
+					uncompressed_data.clear();
 
 				// move the data to result
 				m_result.add_uncompressed_data(uncompressed_data);
