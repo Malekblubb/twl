@@ -83,6 +83,9 @@ namespace twl
 			const auto& result(m_datafilemanager.parser().result());
 			const auto& uncompressed_data(result.uncompressed_data());
 
+			if(!result.valid())
+				return;
+
 			// info
 			auto info(result.items_of_type<map_constants::item_type::info>());
 			if(info.size() == 1)
