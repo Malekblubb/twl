@@ -51,6 +51,11 @@ namespace twl
 				return this->parse();
 			}
 
+			void close()
+			{
+				m_parser.clear();
+			}
+
 			const auto& parser() const noexcept
 			{return m_parser;}
 

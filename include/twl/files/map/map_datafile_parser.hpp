@@ -35,6 +35,11 @@ namespace twl
 			const map_datafile& result() const noexcept
 			{return m_result;}
 
+			void clear()
+			{
+				m_result.clear();
+			}
+
 		private:
 			void parse()
 			{

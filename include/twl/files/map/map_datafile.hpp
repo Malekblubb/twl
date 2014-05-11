@@ -10,6 +10,7 @@
 #include "map_constants.hpp"
 #include "map_datafile_items.hpp"
 
+#include <mlk/containers/container_utl.h>
 #include <mlk/types/types.h>
 
 
@@ -19,9 +20,6 @@ namespace twl
 	{
 		class map_datafile
 		{
-			// header
-			map_datafile_header m_header;
-
 			// items
 			std::vector<map_datafile_item> m_items;
 
@@ -66,6 +64,12 @@ namespace twl
 
 			const auto& uncompressed_data() const noexcept
 			{return m_uncomressed_data;}
+
+			void clear()
+			{
+				mlk::cnt::free_vec(m_items);
+				mlk::cnt::free_vec(m_uncomressed_data);
+			}
 		};
 
 		// tiles

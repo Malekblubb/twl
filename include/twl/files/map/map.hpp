@@ -56,6 +56,14 @@ namespace twl
 			return succ;
 		}
 
+		void close()
+		{
+			m_datafilemanager.close();
+			mlk::cnt::free_vec(m_images);
+			mlk::cnt::free_vec(m_layers);
+			mlk::cnt::free_vec(m_groups);
+		}
+
 		const auto& info() const noexcept
 		{return m_info;}
 
