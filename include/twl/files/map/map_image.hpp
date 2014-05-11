@@ -28,7 +28,7 @@ namespace twl
 			m_width{static_cast<mlk::st>(img->width)},
 			m_height{static_cast<mlk::st>(img->height)},
 			m_external{static_cast<bool>(img->external)},
-			m_data{uncompressed_data[img->image_data]}
+			m_data{img->image_data >= 0 ? uncompressed_data[img->image_data] : mlk::data_packet{}}
 		{ }
 
 	public:
