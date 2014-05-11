@@ -53,6 +53,7 @@ namespace twl
 
 			void close()
 			{
+				mlk::lout("twl::map_datafile_manager") << "closing map";
 				m_parser.clear();
 			}
 

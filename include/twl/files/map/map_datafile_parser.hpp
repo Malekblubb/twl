@@ -49,7 +49,14 @@ namespace twl
 				// cast header
 				auto* header(reinterpret_cast<const map_datafile_header*>(m_raw->data()));
 				if(!header->valid())
+				{
+					mlk::lerr()["twl::internal::map_datafile_parser"] << "mapheader is not valid. can't parse";
 					return;
+				}
+
+
+				// start parsing
+				mlk::lout("twl::internal::map_datafile_parser") << "map seems to be valid. start parsing";
 
 				// skip item types & item offsets
 				mlk::st pos{sizeof(map_datafile_header) + header->num_itemtypes * sizeof(map_datafile_iteminfo) + header->num_items * 4};
