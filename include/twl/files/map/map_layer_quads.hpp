@@ -30,12 +30,15 @@ namespace twl
 			m_quads(qds->num_quads),
 			m_name{qds->version > 1 ? map_constants::ints_to_str(qds->name, 3) : "Quads"}
 		{
-			// add the quads
-			mlk::data_packet tmp(sizeof(internal::quad));
-			for(auto i(0); i < uncompressed_data[qds->data].size(); i += sizeof(internal::quad))
+			if((qds->data >= 0) && (uncompressed_data[qds->data].size() == sizeof(internal::quad) * qds->num_quads))
 			{
-				tmp = {std::begin(uncompressed_data[qds->data]) + i, std::end(uncompressed_data[qds->data])};
-				m_quads[i / sizeof(internal::quad)] = *reinterpret_cast<const internal::quad*>(tmp.data());
+				// add the quads
+				mlk::data_packet tmp(sizeof(internal::quad));
+				for(auto i(0); i < uncompressed_data[qds->data].size(); i += sizeof(internal::quad))
+				{
+					tmp = {std::begin(uncompressed_data[qds->data]) + i, std::end(uncompressed_data[qds->data])};
+					m_quads[i / sizeof(internal::quad)] = *reinterpret_cast<const internal::quad*>(tmp.data());
+				}
 			}
 		}
 

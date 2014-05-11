@@ -58,6 +58,7 @@ namespace twl
 
 		void close()
 		{
+			m_info.clear();
 			m_datafilemanager.close();
 			mlk::cnt::free_vec(m_images);
 			mlk::cnt::free_vec(m_layers);

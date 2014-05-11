@@ -41,8 +41,9 @@ namespace twl
 			m_clipping_h{grp->clip_h},
 			m_name{grp->version > 2 ? map_constants::ints_to_str(grp->name, 3) : "Group"}
 		{
-			for(auto i(grp->startlayer); i < grp->startlayer + grp->numlayers; ++i)
-				m_layers.push_back(layers.at(i));
+			if(layers.size() >= grp->startlayer + grp->numlayers)
+				for(auto i(grp->startlayer); i < grp->startlayer + grp->numlayers; ++i)
+					m_layers.push_back(layers.at(i));
 		}
 
 	public:

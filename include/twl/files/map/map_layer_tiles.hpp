@@ -37,12 +37,15 @@ namespace twl
 			m_tiles(m_width * m_height),
 			m_name{tlm->version > 2 ? map_constants::ints_to_str(tlm->name, 3) : "Tiles"}
 		{
-			// add the tiles
-			mlk::data_packet tmp(sizeof(internal::tile));
-			for(auto i(0); i < uncomoressed_data[tlm->data].size(); i += sizeof(internal::tile))
+			if((tlm->data >= 0) && uncomoressed_data[tlm->data].size() / sizeof(internal::tile) == m_width * m_height)
 			{
-				tmp = {std::begin(uncomoressed_data[tlm->data]) + i, std::begin(uncomoressed_data[tlm->data]) + i + sizeof(internal::tile)};
-				m_tiles[i / sizeof(internal::tile)] = *reinterpret_cast<const internal::tile*>(tmp.data());
+				// add the tiles
+				mlk::data_packet tmp(sizeof(internal::tile));
+				for(auto i(0); i < uncomoressed_data[tlm->data].size(); i += sizeof(internal::tile))
+				{
+					tmp = {std::begin(uncomoressed_data[tlm->data]) + i, std::begin(uncomoressed_data[tlm->data]) + i + sizeof(internal::tile)};
+					m_tiles[i / sizeof(internal::tile)] = *reinterpret_cast<const internal::tile*>(tmp.data());
+				}
 			}
 		}
 
@@ -63,6 +66,9 @@ namespace twl
 
 		auto has_image() const noexcept
 		{return m_image != nullptr;}
+
+		const auto& tiles() const noexcept
+		{return m_tiles;}
 
 		const auto& name() const noexcept
 		{return m_name;}
