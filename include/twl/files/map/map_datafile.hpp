@@ -65,6 +65,9 @@ namespace twl
 			const auto& uncompressed_data() const noexcept
 			{return m_uncomressed_data;}
 
+			auto valid() const noexcept
+			{return !m_uncomressed_data.empty();}
+
 			void clear()
 			{
 				mlk::cnt::free_vec(m_items);
