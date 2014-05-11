@@ -29,7 +29,6 @@ namespace twl
 		std::vector<mlk::sptr<const internal::basic_map_layer>> m_layers;
 		std::string m_name;
 
-
 		map_group(const internal::map_datafile_group* grp, const std::vector<mlk::sptr<internal::basic_map_layer>>& layers) :
 			m_offset_x{grp->offset_x},
 			m_offset_y{grp->offset_y},
@@ -39,14 +38,11 @@ namespace twl
 			m_clipping_x{grp->clip_x},
 			m_clipping_y{grp->clip_y},
 			m_clipping_w{grp->clip_w},
-			m_clipping_h{grp->clip_h}
+			m_clipping_h{grp->clip_h},
+			m_name{map_constants::ints_to_str(grp->name, 3)}
 		{
 			for(auto i(grp->startlayer); i < grp->startlayer + grp->numlayers; ++i)
-			{
 				m_layers.push_back(layers.at(i));
-//				if(m_layers.back()->type() == map_constants::layer_type::tiles)
-//					std::cout << static_cast<const map_layer_tiles*>(m_layers.back()) << std::endl;
-			}
 		}
 
 	public:
