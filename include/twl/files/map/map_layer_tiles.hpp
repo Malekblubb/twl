@@ -35,7 +35,7 @@ namespace twl
 			m_color{tlm->col},
 			m_image{tlm->image >= 0 ? &images.at(tlm->image) : nullptr},
 			m_tiles(m_width * m_height),
-			m_name{map_constants::ints_to_str(tlm->name, 3)}
+			m_name{tlm->version > 2 ? map_constants::ints_to_str(tlm->name, 3) : "Tiles"}
 		{
 			// add the tiles
 			mlk::data_packet tmp(sizeof(internal::tile));

@@ -39,7 +39,7 @@ namespace twl
 			m_clipping_y{grp->clip_y},
 			m_clipping_w{grp->clip_w},
 			m_clipping_h{grp->clip_h},
-			m_name{map_constants::ints_to_str(grp->name, 3)}
+			m_name{grp->version > 2 ? map_constants::ints_to_str(grp->name, 3) : "Group"}
 		{
 			for(auto i(grp->startlayer); i < grp->startlayer + grp->numlayers; ++i)
 				m_layers.push_back(layers.at(i));

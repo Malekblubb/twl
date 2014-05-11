@@ -28,7 +28,7 @@ namespace twl
 			internal::basic_map_layer{map_constants::layer_type::quads},
 			m_image{qds->image >= 0 ? &images.at(qds->image) : nullptr},
 			m_quads(qds->num_quads),
-			m_name{map_constants::ints_to_str(qds->name, 3)}
+			m_name{qds->version > 1 ? map_constants::ints_to_str(qds->name, 3) : "Quads"}
 		{
 			// add the quads
 			mlk::data_packet tmp(sizeof(internal::quad));
