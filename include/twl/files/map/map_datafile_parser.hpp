@@ -43,11 +43,13 @@ namespace twl
 		private:
 			void parse()
 			{
-				if(m_raw == nullptr)
+				if(m_raw == nullptr || m_raw->size() < sizeof(map_datafile_header))
 					return;
 
 				// cast header
 				auto* header(reinterpret_cast<const map_datafile_header*>(m_raw->data()));
+				if(!header->valid())
+					return;
 
 				// skip item types & item offsets
 				mlk::st pos{sizeof(map_datafile_header) + header->num_itemtypes * sizeof(map_datafile_iteminfo) + header->num_items * 4};
