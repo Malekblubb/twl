@@ -74,3 +74,23 @@ auto infos(servers.get_infos());
 for(auto& a : infos)
 	std::cout << a.name() << std::endl;
 ```
+  
+  
+###Map
+Extract embedded images of a map:
+```cpp
+twl::map my_map{"/path/to/map"};
+
+// open map
+if(my_map.open())
+{
+	for(const auto& image : my_map.images())
+	{
+		if(!image.external() && !image.data().empty())
+		{
+			// save the image now f.e. with pnglite
+			// mlk lib syntax: mlk::gcs::image{image.data(), image.width(), image.height()}.save("/save/path/imgname.png");
+		}
+	}
+}
+```
