@@ -35,6 +35,8 @@ namespace twl
 		// groups
 		std::vector<map_group> m_groups;
 
+		bool m_valid{false};
+
 	public:
 		map() = default;
 
@@ -44,20 +46,23 @@ namespace twl
 
 		bool open()
 		{
-			auto succ(m_datafilemanager.open());
-			this->construct_items();
-			return succ;
+			m_valid = m_datafilemanager.open();
+			if(m_valid)
+				this->construct_items();
+			return m_valid;
 		}
 
 		bool open(const std::string& path)
 		{
-			auto succ(m_datafilemanager.open(path));
-			this->construct_items();
-			return succ;
+			m_valid = m_datafilemanager.open(path);
+			if(m_valid)
+				this->construct_items();
+			return m_valid;
 		}
 
 		void close()
 		{
+			m_valid = false;
 			m_info.clear();
 			m_datafilemanager.close();
 			mlk::cnt::free_vec(m_images);
@@ -77,6 +82,9 @@ namespace twl
 		const auto& groups() const noexcept
 		{return m_groups;}
 
+		auto valid() const noexcept
+		{return m_valid;}
+
 	private:
 		void construct_items()
 		{
@@ -84,7 +92,10 @@ namespace twl
 			const auto& uncompressed_data(result.uncompressed_data());
 
 			if(!result.valid())
+			{
+				m_valid = false;
 				return;
+			}
 
 			// info
 			auto info(result.items_of_type<map_constants::item_type::info>());
