@@ -14,6 +14,8 @@
 
 namespace twl
 {
+	using tiles = std::vector<internal::tile>;
+
 	namespace map_constants
 	{
 		enum item_type
