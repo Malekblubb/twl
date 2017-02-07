@@ -27,17 +27,26 @@ namespace twl
 		game_server()
 		{this->init();}
 
-		void add_server(const mlk::ntw::ip_address& addr)
+                void add_server(const mlk::ntw::ip_address& addr)
 		{
 			if(!mlk::cnt::exists(addr, m_servers))
-				m_servers.push_back(addr);
-		}
+                                m_servers.push_back(addr);
+                }
 
 		void add_masterlist(const masterlist& list)
 		{
 			m_servers += list;
 			mlk::cnt::remove_multiple_but_one(m_servers); // remove double entrys
 		}
+
+                template <typename Func>
+                void request_info(Func&& f)
+                {
+                    on_finish = f;
+                    m_infos.clear();
+                    for(auto& a : m_servers)
+                        this->request<internal::server_request::game_get_info>(a);
+                }
 
 		void request_info()
 		{

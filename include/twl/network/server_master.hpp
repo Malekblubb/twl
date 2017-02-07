@@ -43,12 +43,21 @@ namespace twl
 				this->request<internal::server_request::master_get_count>(a);
 		}
 
-		void request_list()
-		{
-			m_listresult.clear();
-			for(auto& a : m_servers)
-				this->request<internal::server_request::master_get_list>(a);
-		}
+                template <typename Func>
+                void request_list(Func&& f)
+                {
+                    on_finish = f;
+                        m_listresult.clear();
+                        for(auto& a : m_servers)
+                                this->request<internal::server_request::master_get_list>(a);
+                }
+
+                void request_list()
+                {
+                        m_listresult.clear();
+                        for(auto& a : m_servers)
+                                this->request<internal::server_request::master_get_list>(a);
+                }
 
 		void reset() noexcept
 		{
