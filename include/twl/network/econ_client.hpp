@@ -1,11 +1,10 @@
 //
-// Copyright (c) 2013-2014 Christoph Malek
+// Copyright (c) 2013-2017 Christoph Malek
 // See LICENSE for more information.
 //
 
 #ifndef TWL_NETWORK_ECON_CLIENT_HPP
 #define TWL_NETWORK_ECON_CLIENT_HPP
-
 
 #include "econ_parser.hpp"
 #include "ntw_constants.hpp"
@@ -16,7 +15,6 @@
 #include <mlk/tools/stl_string_utl.h>
 
 #include <deque>
-
 
 namespace twl
 {
@@ -32,7 +30,8 @@ namespace twl
 		std::deque<econ_command> m_cmd_queue;
 
 		// connect timeout
-		mlk::tm::simple_timer m_timeouttimer{internal::ntw_constants::econ_timeout()};
+		mlk::tm::simple_timer m_timeouttimer{
+			internal::ntw_constants::econ_timeout()};
 
 		// log
 		std::string m_logstr;
@@ -53,45 +52,39 @@ namespace twl
 		mlk::slot<const econ_player_infos&> on_playerinfo;
 		mlk::slot<const std::string&> on_log_added;
 
-		econ_client() :
-			m_recv_data(internal::ntw_constants::max_datasize())
-		{ }
+		econ_client() : m_recv_data(internal::ntw_constants::max_datasize()) {}
 
-		econ_client(const mlk::ntw::ip_address& addr) :
-			econ_client{}
-		{this->connect(addr);}
+		econ_client(const mlk::ntw::ip_address& addr) : econ_client{}
+		{
+			this->connect(addr);
+		}
 
 		void update()
 		{
-			if(!m_running)
-				return;
+			if(!m_running) return;
 
 			// recv data
 			this->recv();
 
 			// process cmd queue
-			for(std::size_t i{0}; i < m_cmd_queue.size(); ++i)
-			{
+			for(std::size_t i{0}; i < m_cmd_queue.size(); ++i) {
 				if(this->send_command_impl(m_cmd_queue.front()))
 					m_cmd_queue.pop_front();
 			}
 
-			if(m_need_connect)
-			{
+			if(m_need_connect) {
 				// try connect
 				if(this->connect_impl())
 					this->on_connection();
-				else
-					if(m_timeouttimer.timed_out())
-					{
-						this->reset();
-						this->on_connection_timeout();
-					}
+				else if(m_timeouttimer.timed_out())
+				{
+					this->reset();
+					this->on_connection_timeout();
+				}
 			}
 
 			// send pass if needed
-			if(m_need_send_pass && m_connected)
-			{
+			if(m_need_send_pass && m_connected) {
 				this->send_command_impl(m_next_pass);
 				m_need_send_pass = false;
 			}
@@ -111,26 +104,28 @@ namespace twl
 			m_running = true;
 		}
 
-		void request_playerinfo()
-		{this->send_command("status");}
+		void request_playerinfo() { this->send_command("status"); }
 
 		void send_command(const econ_command& cmd)
-		{m_cmd_queue.push_back(cmd);}
+		{
+			m_cmd_queue.push_back(cmd);
+		}
 
-		bool connected() const noexcept
-		{return m_connected;}
+		bool connected() const noexcept { return m_connected; }
 
-		bool logged_in() const noexcept
-		{return m_logged;}
+		bool logged_in() const noexcept { return m_logged; }
 
 		const mlk::ntw::ip_address& address() const noexcept
-		{return m_telnet.address();}
+		{
+			return m_telnet.address();
+		}
 
-		const std::string& log() const
-		{return m_logstr;}
+		const std::string& log() const { return m_logstr; }
 
 		const econ_player_infos& last_playerinfos() const noexcept
-		{return m_last_playerinfos;}
+		{
+			return m_last_playerinfos;
+		}
 
 	private:
 		void reset()
@@ -146,14 +141,14 @@ namespace twl
 		void recv()
 		{
 			m_recv_data.clear();
-			auto ret(m_telnet.recv_line(m_recv_data, internal::ntw_constants::max_datasize()));
-			m_recv_data.erase(std::begin(m_recv_data) + ret, std::end(m_recv_data));
+			auto ret(m_telnet.recv_line(
+				m_recv_data, internal::ntw_constants::max_datasize()));
+			m_recv_data.erase(std::begin(m_recv_data) + ret,
+							  std::end(m_recv_data));
 
 			// connection lost
-			if(ret == 0)
-			{
-				if(!m_need_connect)
-				{
+			if(ret == 0) {
+				if(!m_need_connect) {
 					this->reset();
 					this->on_connection_lost();
 				}
@@ -163,8 +158,7 @@ namespace twl
 			else if(ret > 0)
 			{
 				internal::econ_parser parser{m_recv_data};
-				if(parser.login_reply())
-				{
+				if(parser.login_reply()) {
 					m_need_send_pass = false;
 					m_logged = true;
 					this->on_login();
@@ -182,8 +176,7 @@ namespace twl
 
 		bool connect_impl()
 		{
-			if(m_new_connection)
-			{
+			if(m_new_connection) {
 				m_new_connection = false;
 				m_timeouttimer.run();
 				m_telnet.disconnect();
@@ -196,8 +189,7 @@ namespace twl
 
 		bool send_command_impl(const econ_command& cmd)
 		{
-			if(!m_running || !m_connected)
-				return false;
+			if(!m_running || !m_connected) return false;
 
 			auto data(mlk::stl_string::to_data_packet(cmd));
 			m_telnet.send_line(data);
@@ -215,5 +207,4 @@ namespace twl
 	};
 }
 
-
-#endif // TWL_NETWORK_ECON_CLIENT_HPP
+#endif// TWL_NETWORK_ECON_CLIENT_HPP

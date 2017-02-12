@@ -1,18 +1,16 @@
 //
-// Copyright (c) 2013-2014 Christoph Malek
+// Copyright (c) 2013-2017 Christoph Malek
 // See LICENSE for more information.
 //
 
 #ifndef TWL_NETWORK_REQUEST_JOB_HPP
 #define TWL_NETWORK_REQUEST_JOB_HPP
 
-
 #include "requests.hpp"
 
 #include <mlk/network/address.h>
 #include <mlk/time/time_utl.h>
 #include <mlk/types/types.h>
-
 
 namespace twl
 {
@@ -32,24 +30,23 @@ namespace twl
 		public:
 			request_job() = default;
 
-			request_job(const mlk::ntw::ip_address& addr, std::size_t timeout, mlk::ushort max_resend, server_request req) :
-				m_address{addr},
-				m_timeout{timeout},
-				m_max_resend{max_resend},
-				m_request{req}
-			{ }
+			request_job(const mlk::ntw::ip_address& addr, std::size_t timeout,
+						mlk::ushort max_resend, server_request req)
+				: m_address{addr},
+				  m_timeout{timeout},
+				  m_max_resend{max_resend},
+				  m_request{req}
+			{
+			}
 
 			void update()
 			{
-				if(m_need_delete)
-					return;
+				if(m_need_delete) return;
 
-				if(m_sent && mlk::tm::timed_out(m_send_tp, m_timeout))
-				{
+				if(m_sent && mlk::tm::timed_out(m_send_tp, m_timeout)) {
 					m_need_resend = true;
 					++m_current_resend;
-					if(m_current_resend >= m_max_resend)
-						m_need_delete = true;
+					if(m_current_resend >= m_max_resend) m_need_delete = true;
 				}
 			}
 
@@ -60,27 +57,25 @@ namespace twl
 				m_sent = true;
 			}
 
-			void on_recv() noexcept
-			{m_recv_tp = mlk::tm::time_pnt();}
-
+			void on_recv() noexcept { m_recv_tp = mlk::tm::time_pnt(); }
 
 			const mlk::ntw::ip_address& addr() const noexcept
-			{return m_address;}
+			{
+				return m_address;
+			}
 
 			float latency() const noexcept
-			{return mlk::tm::duration_as<float>(m_send_tp, m_recv_tp);}
+			{
+				return mlk::tm::duration_as<float>(m_send_tp, m_recv_tp);
+			}
 
-			bool need_resend() const noexcept
-			{return m_need_resend;}
+			bool need_resend() const noexcept { return m_need_resend; }
 
-			bool need_delete() const noexcept
-			{return m_need_delete;}
+			bool need_delete() const noexcept { return m_need_delete; }
 
-			server_request request_type() const noexcept
-			{return m_request;}
+			server_request request_type() const noexcept { return m_request; }
 		};
 	}
 }
 
-
-#endif // TWL_NETWORK_REQUEST_JOB_HPP
+#endif// TWL_NETWORK_REQUEST_JOB_HPP

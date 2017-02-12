@@ -1,16 +1,14 @@
 //
-// Copyright (c) 2013-2014 Christoph Malek
+// Copyright (c) 2013-2017 Christoph Malek
 // See LICENSE for more information.
 //
 
 #ifndef TWL_FILES_MAP_MAP_DATAFILE_ITEMS_H
 #define TWL_FILES_MAP_MAP_DATAFILE_ITEMS_H
 
-
 #include <mlk/types/types.h>
 
 #include <cstring>
-
 
 namespace twl
 {
@@ -29,14 +27,15 @@ namespace twl
 			int data_area_size;
 
 			bool valid() const noexcept
-			{return ((std::memcmp(sig, "DATA", 4) == 0) && (ver == 4));}
+			{
+				return ((std::memcmp(sig, "DATA", 4) == 0) && (ver == 4));
+			}
 
 			int body_size() const noexcept
 			{
-				return (num_itemtypes * 12) +
-						(num_items * sizeof(int)) +
-						((num_rawdata * sizeof(int)) * 2) +
-						item_area_size + data_area_size;
+				return (num_itemtypes * 12) + (num_items * sizeof(int)) +
+					   ((num_rawdata * sizeof(int)) * 2) + item_area_size +
+					   data_area_size;
 			}
 		};
 
@@ -53,7 +52,6 @@ namespace twl
 			int id;
 			mlk::data_packet data;
 		};
-
 
 		// items
 
@@ -184,6 +182,4 @@ namespace twl
 	}
 }
 
-
-#endif // TWL_FILES_MAP_MAP_DATAFILE_ITEMS_H
-
+#endif// TWL_FILES_MAP_MAP_DATAFILE_ITEMS_H

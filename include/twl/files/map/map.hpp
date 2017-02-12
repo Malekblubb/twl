@@ -1,11 +1,10 @@
 //
-// Copyright (c) 2013-2014 Christoph Malek
+// Copyright (c) 2013-2017 Christoph Malek
 // See LICENSE for more information.
 //
 
 #ifndef TWL_FILES_MAP_MAP_H
 #define TWL_FILES_MAP_MAP_H
-
 
 #include "basic_map_layer.hpp"
 #include "map_datafile_manager.hpp"
@@ -14,7 +13,6 @@
 #include "map_info.hpp"
 #include "map_layer_quads.hpp"
 #include "map_layer_tiles.hpp"
-
 
 namespace twl
 {
@@ -40,23 +38,19 @@ namespace twl
 	public:
 		map() = default;
 
-		map(const std::string& path) :
-			m_datafilemanager{path}
-		{ }
+		map(const std::string& path) : m_datafilemanager{path} {}
 
 		bool open()
 		{
 			m_valid = m_datafilemanager.open();
-			if(m_valid)
-				this->construct_items();
+			if(m_valid) this->construct_items();
 			return m_valid;
 		}
 
 		bool open(const std::string& path)
 		{
 			m_valid = m_datafilemanager.open(path);
-			if(m_valid)
-				this->construct_items();
+			if(m_valid) this->construct_items();
 			return m_valid;
 		}
 
@@ -70,20 +64,15 @@ namespace twl
 			mlk::cnt::free_vec(m_groups);
 		}
 
-		const auto& info() const noexcept
-		{return m_info;}
+		const auto& info() const noexcept { return m_info; }
 
-		const auto& images() const noexcept
-		{return m_images;}
+		const auto& images() const noexcept { return m_images; }
 
-		const auto& layers() const noexcept
-		{return m_layers;}
+		const auto& layers() const noexcept { return m_layers; }
 
-		const auto& groups() const noexcept
-		{return m_groups;}
+		const auto& groups() const noexcept { return m_groups; }
 
-		auto valid() const noexcept
-		{return m_valid;}
+		auto valid() const noexcept { return m_valid; }
 
 	private:
 		void construct_items()
@@ -91,40 +80,47 @@ namespace twl
 			const auto& result(m_datafilemanager.parser().result());
 			const auto& uncompressed_data(result.uncompressed_data());
 
-			if(!result.valid())
-			{
+			if(!result.valid()) {
 				m_valid = false;
 				return;
 			}
 
 			// info
 			auto info(result.items_of_type<map_constants::item_type::info>());
-			if(info.size() == 1)
-				m_info = {info[0], uncompressed_data};
+			if(info.size() == 1) m_info = {info[0], uncompressed_data};
 
 			// images
-			for(const auto& a : result.items_of_type<map_constants::item_type::image>())
+			for(const auto& a :
+				result.items_of_type<map_constants::item_type::image>())
 				m_images.emplace_back(map_image{a, uncompressed_data});
 
 			// layers
-			for(const auto& a : result.items_of_type<map_constants::item_type::layer>())
+			for(const auto& a :
+				result.items_of_type<map_constants::item_type::layer>())
 			{
 				if(a->type == map_constants::layer_type::game)
-					m_layers.emplace_back(new internal::basic_map_layer{map_constants::layer_type::game});
+					m_layers.emplace_back(new internal::basic_map_layer{
+						map_constants::layer_type::game});
 
 				else if(a->type == map_constants::layer_type::tiles)
-					m_layers.emplace_back(new map_layer_tiles{reinterpret_cast<const internal::map_datafile_layer_tilemap*>(a), uncompressed_data, m_images});
+					m_layers.emplace_back(new map_layer_tiles{
+						reinterpret_cast<
+							const internal::map_datafile_layer_tilemap*>(a),
+						uncompressed_data, m_images});
 
 				else if(a->type == map_constants::layer_type::quads)
-					m_layers.emplace_back(new map_layer_quads{reinterpret_cast<const internal::map_datafile_layer_quads*>(a), uncompressed_data, m_images});
+					m_layers.emplace_back(new map_layer_quads{
+						reinterpret_cast<
+							const internal::map_datafile_layer_quads*>(a),
+						uncompressed_data, m_images});
 			}
 
 			// groups
-			for(const auto& a : result.items_of_type<map_constants::item_type::group>())
+			for(const auto& a :
+				result.items_of_type<map_constants::item_type::group>())
 				m_groups.emplace_back(map_group{a, m_layers});
 		}
 	};
 }
 
-
-#endif // TWL_FILES_MAP_MAP_H
+#endif// TWL_FILES_MAP_MAP_H
